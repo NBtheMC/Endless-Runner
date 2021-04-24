@@ -1,4 +1,7 @@
 class Play extends Phaser.Scene {
+    firePrompt;
+    grassPrompt;
+    waterPrompt;
     constructor() {
         super("playScene");
     }
@@ -30,9 +33,6 @@ class Play extends Phaser.Scene {
                 obstacle.scene.activeObstacles.add(obstacle)
             }
         });
-
-        // number of consecutive jumps made by the player
-        //this.playerJumps = 0;
  
         // adding the player;
         this.player = this.physics.add.sprite(gameOptions.playerStartPosition, game.config.height / 2, 'player');
@@ -40,14 +40,30 @@ class Play extends Phaser.Scene {
  
         // setting collisions between the player and the platform
         this.physics.add.collider(this.player, this.platform);
- 
-        // checking for input
-        //this.input.keyboard.on('keydown-SPACE', this.jump, this);
 
         // Keyboard stuff
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
         keyG = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.G);
         keyB = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.B);
+
+        // Prompts
+        let promptConfig = {
+            fontFamily: 'Verdana',
+            fontSize: '28px',
+            backgroundColor: '#FFFFFF',
+            color: '#000000',
+            align: 'left',
+            padding: {
+                top: 5,
+                bottom: 5,
+                right: 5,
+                left: 5,
+            }
+        }
+        this.firePrompt = this.add.text(200, 100, 'Press R!', promptConfig).setOrigin(0.5).setVisible(false);
+        this.grassPrompt = this.add.text(200, 100, 'Press G!', promptConfig).setOrigin(0.5).setVisible(false);
+        this.waterPrompt = this.add.text(200, 100, 'Press B!', promptConfig).setOrigin(0.5).setVisible(false);
+
     }
 
     // Adds obstacle
@@ -65,24 +81,11 @@ class Play extends Phaser.Scene {
             obstacle.setGravityY(gameOptions.playerGravity);
 
             this.physics.add.collider(this.platform, obstacle);
-            //this.physics.add.collider(this.player, obstacle);
 
             this.activeObstacles.add(obstacle);
         }
 
     }
-
-    // the player jumps when on the ground, or once in the air as long as there are jumps left and the first jump was on the ground
-    /*
-    jump(){
-        if(this.player.body.touching.down || (this.playerJumps > 0 && this.playerJumps < gameOptions.jumps)){
-            if(this.player.body.touching.down){
-                this.playerJumps = 0;
-            }
-            this.player.setVelocityY(gameOptions.jumpForce * -1);
-            this.playerJumps ++;
-        }
-    }*/
 
     update() {
         // game over
@@ -99,16 +102,19 @@ class Play extends Phaser.Scene {
             if(this.activeObstacles.getLength() > 0 && Phaser.Input.Keyboard.JustDown(keyR) && gameOptions.element == 1) {
                 this.activeObstacles.killAndHide(obstacle);
                 this.activeObstacles.remove(obstacle);
+                this.destroyPrompt();
             }
             // Grass
             if(this.activeObstacles.getLength() > 0 && Phaser.Input.Keyboard.JustDown(keyG) && gameOptions.element == 2) {
                 this.activeObstacles.killAndHide(obstacle);
                 this.activeObstacles.remove(obstacle);
+                this.destroyPrompt();
             }
             // Water
             if(this.activeObstacles.getLength() > 0 && Phaser.Input.Keyboard.JustDown(keyB) && gameOptions.element == 3) {
                 this.activeObstacles.killAndHide(obstacle);
                 this.activeObstacles.remove(obstacle);
+                this.destroyPrompt();
             }
             // If obstacle collides with player
             if(obstacle.x < gameOptions.playerStartPosition + this.player.width * 1.5) {
@@ -123,14 +129,42 @@ class Play extends Phaser.Scene {
             gameOptions.element = value;
             if(value == 1) {
                 this.addObstacle(game.config.width, 'fire');
+                setTimeout(() => { this.showPrompt()}, 500);
             }
             if(value == 2) {
                 this.addObstacle(game.config.width, 'grass');
+                setTimeout(() => { this.showPrompt()}, 500);
             }
             if(value == 3) {
                 this.addObstacle(game.config.width, 'water');
+                setTimeout(() => { this.showPrompt()}, 500);
             }
         }
 
+    }
+
+    showPrompt() {
+        let value = gameOptions.element;
+        if(value == 1) {
+            this.firePrompt.setVisible(true);
+        }
+        if(value == 2) {
+            this.grassPrompt.setVisible(true);
+        }
+        if(value == 3) {
+            this.waterPrompt.setVisible(true);
+        }
+    }
+
+    destroyPrompt() {
+        if(gameOptions.element == 1) {
+            this.firePrompt.setVisible(false);
+        }
+        if(gameOptions.element == 2) {
+            this.grassPrompt.setVisible(false);
+        }
+        if(gameOptions.element == 3) {
+            this.waterPrompt.setVisible(false);
+        }
     }
 }
