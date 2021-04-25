@@ -27,7 +27,7 @@ class Menu extends Phaser.Scene {
         // Menu Text
         this.add.text(game.config.width/2, game.config.height/2, "Bill Hader's Wizard Adventure!", menuConfig).setOrigin(0.5);
         this.add.text(game.config.width/2, game.config.height/2 + 50, 'Use the arrow keys to dodge incoming obstacles', menuConfig).setOrigin(0.5);
-        this.add.text(game.config.width/2, game.config.height/2 + 100, 'Press the prompt in time to destroy them', menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2 + 100, 'or press the prompt in time to destroy them and get more points', menuConfig).setOrigin(0.5);
         this.add.text(game.config.width/2, game.config.height/2 + 150, 'Press Space to start!', menuConfig).setOrigin(0.5);
 
         // Define Keys
