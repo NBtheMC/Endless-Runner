@@ -78,10 +78,10 @@ class Play extends Phaser.Scene{
             this.inactiveObstacles.remove(obstacle);
         } else {
             obstacle = this.physics.add.sprite(x * 1.5, game.config.height * .6, element);
+            //randomize y
+            obstacle.y = 200 * Phaser.Math.Between(1, 3);
             obstacle.setScale(.1);
             obstacle.setVelocityX(gameOptions.obstacleStartSpeed * -3);
-
-            this.physics.add.collider(this.player, obstacle);
 
             this.activeObstacles.add(obstacle);
         }
