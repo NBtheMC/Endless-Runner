@@ -31,10 +31,6 @@ class Play extends Phaser.Scene{
         //obstacle stuff
         // Create group of active obstacles
         this.activeObstacles = this.add.group({
-            // Once an obstacle is destroyed, it is re-added to the inactive group
-            //removeCallback: function(obstacle){
-            //   obstacle.scene.inactiveObstacles.add(obstacle)
-            //}
         });
 
         // Create group of inactive obstacles
@@ -44,6 +40,7 @@ class Play extends Phaser.Scene{
             }
         });
 
+        // Prompt
         let promptConfig = {
             fontFamily: 'Verdana',
             fontSize: '28px',
@@ -65,6 +62,11 @@ class Play extends Phaser.Scene{
         keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
+
+        // Collisions
+        this.physics.add.collider(this.player, this.activeObstacles, null, function() {
+            this.scene.start('menuScene');
+        }, this);
     }
 
     // Adds obstacle
@@ -110,10 +112,9 @@ class Play extends Phaser.Scene{
         }
 
         // Obstacles
-        // recycling obstacles
         this.activeObstacles.getChildren().forEach(function(obstacle) {
             console.log(gameOptions.element);
-            // Destroy objects
+            // Destroy obstacles if player presses a key
             // Fire
             if(this.activeObstacles.getLength() > 0 && Phaser.Input.Keyboard.JustDown(keyQ) && gameOptions.element == 1) {
                 this.activeObstacles.killAndHide(obstacle);
@@ -132,9 +133,12 @@ class Play extends Phaser.Scene{
                 this.activeObstacles.remove(obstacle);
                 this.destroyPrompt();
             }
-            // If obstacle collides with player
-            if(obstacle.x < gameOptions.playerStartPosition + this.player.width * 1.5) {
-                this.scene.start('menuScene');
+
+            // Destroy obstacles if they go past the screen
+            if(obstacle.x < 0) {
+                this.activeObstacles.killAndHide(obstacle);
+                this.activeObstacles.remove(obstacle);
+                this.destroyPrompt();
             }
         }, this);
 
