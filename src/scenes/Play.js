@@ -121,32 +121,23 @@ class Play extends Phaser.Scene{
             this.player.body.setAccelerationX(0);
         }
 
-         //throwing different potions
-         if(!this.isThrowing){
+        //throwing different potions
+        if(!this.isThrowing){
             if(Phaser.Input.Keyboard.JustDown(keyQ)){
-                //change type DO LATER
-                this.isThrowing = true;
-                this.potion.visible = true;
-                this.potion.x = this.player.x;
-                this.potion.y = this.player.y;
+                this.throwPotion();
             }
             else if(Phaser.Input.Keyboard.JustDown(keyW)){
-                //change type DO LATER
-                this.isThrowing = true;
-                this.potion.visible = true;
-                this.potion.x = this.player.x;
-                this.potion.y = this.player.y;
+                this.throwPotion();
             }
             else if(Phaser.Input.Keyboard.JustDown(keyE)){
-                //change type DO LATER
-                this.isThrowing = true;
-                this.potion.visible = true;
-                this.potion.x = this.player.x;
-                this.potion.y = this.player.y;
+                this.throwPotion();
             }
         }
         else{
-            this.potion.body.setVelocityX(2000);
+            if(this.potion.x >= game.config.width){
+                this.resetPotion();
+            }
+            this.potion.body.setVelocityX(1200);
         }
 
         // Obstacles
@@ -199,6 +190,21 @@ class Play extends Phaser.Scene{
             }
         } 
         
+    }
+
+    throwPotion(){
+        //change type DO LATER
+        this.isThrowing = true;
+        this.potion.visible = true;
+        this.potion.x = this.player.x;
+        this.potion.y = this.player.y;
+    }
+
+    resetPotion(){
+        this.isThrowing = false;
+        this.potion.visible = false;
+        this.potion.x = 0;
+        this.potion.y = 0;
     }
 
     showPrompt() {
