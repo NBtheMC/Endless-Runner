@@ -12,7 +12,7 @@ let config = {
             // }
         }
     },
-    scene: [Menu, Play, Tutorial, Potion]
+    scene: [Menu, Play, Tutorial]
 }
 
 let gameOptions = {

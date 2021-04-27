@@ -8,6 +8,7 @@ class Play extends Phaser.Scene{
         this.load.image('fire', 'assets/tempfire.png');
         this.load.image('water', 'assets/tempwater.png');
         this.load.image('grass', 'assets/tempgrass.png');
+        this.load.image('potion', 'assets/temppotion.png');
     }
 
     create(){
@@ -58,13 +59,22 @@ class Play extends Phaser.Scene{
         this.grassPrompt = this.add.text(200, 100, 'Press W!', promptConfig).setOrigin(0.5).setVisible(false);
         this.waterPrompt = this.add.text(200, 100, 'Press E!', promptConfig).setOrigin(0.5).setVisible(false);    
 
+        // potion stuff
         // set prompt inputs
         keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
+       
+        this.potion = this.physics.add.sprite(0, 0, 'potion').setScale(.1);
+        this.potion.visible = false;
+        this.isThrowing = false;
 
         // Collisions
         this.physics.add.collider(this.player, this.activeObstacles, null, function() {
+            this.scene.start('menuScene');
+        }, this);
+
+        this.physics.add.collider(this.potion, this.activeObstacles, null, function() {
             this.scene.start('menuScene');
         }, this);
     }
@@ -109,6 +119,34 @@ class Play extends Phaser.Scene{
         }
         else{
             this.player.body.setAccelerationX(0);
+        }
+
+         //throwing different potions
+         if(!this.isThrowing){
+            if(Phaser.Input.Keyboard.JustDown(keyQ)){
+                //change type DO LATER
+                this.isThrowing = true;
+                this.potion.visible = true;
+                this.potion.x = this.player.x;
+                this.potion.y = this.player.y;
+            }
+            else if(Phaser.Input.Keyboard.JustDown(keyW)){
+                //change type DO LATER
+                this.isThrowing = true;
+                this.potion.visible = true;
+                this.potion.x = this.player.x;
+                this.potion.y = this.player.y;
+            }
+            else if(Phaser.Input.Keyboard.JustDown(keyE)){
+                //change type DO LATER
+                this.isThrowing = true;
+                this.potion.visible = true;
+                this.potion.x = this.player.x;
+                this.potion.y = this.player.y;
+            }
+        }
+        else{
+            this.potion.body.setVelocityX(2000);
         }
 
         // Obstacles
@@ -159,7 +197,8 @@ class Play extends Phaser.Scene{
                 this.addObstacle(game.config.width, 'water');
                 setTimeout(() => { this.showPrompt()}, 500);
             }
-        }        
+        } 
+        
     }
 
     showPrompt() {
