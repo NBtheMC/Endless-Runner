@@ -14,7 +14,8 @@ class Play extends Phaser.Scene{
     create(){
         console.log("play");
         //affects slide
-        this.ACCELERATION = 10000;
+        this.ACCELERATIONX = 5000;
+        this.ACCELERATIONY = 10000;
         this.DRAG = 2000;
         this.MAXVELOCITYX = 400;
         this.MAXVELOCITYY = 900;
@@ -69,11 +70,12 @@ class Play extends Phaser.Scene{
         this.potion.visible = false;
         this.isThrowing = false;
 
-        // Collisions
+        //player collides with obstacle (game over)
         this.physics.add.collider(this.player, this.activeObstacles, null, function() {
             this.scene.start('menuScene');
         }, this);
 
+        //potion collides with obstacle (get rid of obstacle and reset potion)
         this.physics.add.collider(this.potion, this.activeObstacles, null, function() {
             this.scene.start('menuScene');
         }, this);
@@ -92,7 +94,7 @@ class Play extends Phaser.Scene{
             obstacle = this.physics.add.sprite(x * 1.5, game.config.height * .6, element);
             //randomize y
             obstacle.y = 200 * Phaser.Math.Between(1, 3);
-            obstacle.setScale(.1);
+            obstacle.setScale(.1); //sprites a bit too big
             obstacle.setVelocityX(gameOptions.obstacleStartSpeed * -3);
 
             this.activeObstacles.add(obstacle);
@@ -102,20 +104,20 @@ class Play extends Phaser.Scene{
     update(){
         //movement y
         if(cursors.up.isDown){
-            this.player.body.setAccelerationY(-this.ACCELERATION);
+            this.player.body.setAccelerationY(-this.ACCELERATIONY);
         }
         else if(cursors.down.isDown){
-            this.player.body.setAccelerationY(this.ACCELERATION);
+            this.player.body.setAccelerationY(this.ACCELERATIONY);
         }
         else{
             this.player.body.setAccelerationY(0);
         }
         //movement x
         if(cursors.right.isDown){
-            this.player.body.setAccelerationX(this.ACCELERATION);
+            this.player.body.setAccelerationX(this.ACCELERATIONX);
         }
         else if(cursors.left.isDown){
-            this.player.body.setAccelerationX(-this.ACCELERATION);
+            this.player.body.setAccelerationX(-this.ACCELERATIONX);
         }
         else{
             this.player.body.setAccelerationX(0);
