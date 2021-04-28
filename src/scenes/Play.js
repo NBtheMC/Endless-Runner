@@ -76,9 +76,12 @@ class Play extends Phaser.Scene{
         }, this);
 
         //potion collides with obstacle (get rid of obstacle and reset potion)
-        this.physics.add.collider(this.potion, this.activeObstacles, null, function() {
-            this.scene.start('menuScene');
-        }, this);
+        //p = potion o is obstacle
+        this.physics.add.collider(this.potion, this.activeObstacles, function(p,o) {
+            this.activeObstacles.remove(o);
+            o.destroy();
+            this.resetPotion();
+        }, null, this);
     }
 
     // Adds obstacle
