@@ -138,6 +138,8 @@ class Play extends Phaser.Scene{
     }    
 
     update(){
+        //parallax ooooh
+        this.background.tilePositionX += 33;
         //console.log(activeY);
         //movement y
         if(cursors.up.isDown){
