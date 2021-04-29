@@ -96,6 +96,10 @@ class Play extends Phaser.Scene{
         //potion collides with obstacle (get rid of obstacle and reset potion)
         //p = potion, o = obstacle
         this.physics.add.collider(this.potion, this.activeObstacles, function(p,o) {
+            this.potion.setVelocityX(0);
+            this.potion.setAccelerationX(0);
+            o.setVelocityX(0);
+            o.setAccelerationX(0);
             if(p.element == o.element){
                 let currentY = o.y;
                 //this.activeObstacles.remove(o);
@@ -121,6 +125,9 @@ class Play extends Phaser.Scene{
                     onCompleteScope: this,
                 });
             }
+            else{
+                this.resetPotion();
+            }
         }, null, this);
     }
 
@@ -134,7 +141,7 @@ class Play extends Phaser.Scene{
             obstacle.visible = true;
             this.inactiveObstacles.remove(obstacle);
         } else {
-            obstacle = this.physics.add.sprite(x * 1.5, game.config.height * .6, element);
+            obstacle = this.physics.add.sprite(x * 1.5, game.config.height * .6, element)
             //set element so potion can detect it
             switch(element){
                 case 'fire':
@@ -274,7 +281,7 @@ class Play extends Phaser.Scene{
             follow: this.potion
         });
         //change type DO LATER
-        this.element = newElement;
+        this.potion.element = newElement;
         this.isThrowing = true;
         this.potion.visible = true;
         this.potion.alpha = 100;
