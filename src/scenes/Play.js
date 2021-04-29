@@ -14,8 +14,9 @@ class Play extends Phaser.Scene{
 
     create(){
         //invisible wall at top
-        this.topBarrier = this.physics.add.sprite(0, 0, 1800,game.config.height/3);
-        this.topBarrier.body.setSize(game.config.width,game.config.height/3, game.config.width,game.config.height/3);
+        this.topBarrier = this.physics.add.sprite(game.config.width/2, 0, 1800,game.config.height/3);
+        this.topBarrier.body.setSize(game.config.width, game.config.height/3);
+        //this.topBarrier.body.setSize(100,100);
         this.topBarrier.setImmovable(true);
         console.log("play");
         this.background = this.add.tileSprite(0,0,1800,720,'background').setOrigin(0,0);
@@ -82,22 +83,19 @@ class Play extends Phaser.Scene{
             this.scene.start('menuScene');
         }, this);
 
-        //tween
-        //let scene = this;
-
         //potion collides with obstacle (get rid of obstacle and reset potion)
         //p = potion, o = obstacle
         this.physics.add.collider(this.potion, this.activeObstacles, function(p,o) {
             let currentY = o.y;
-            this.activeObstacles.remove(o);
-            o.destroy();
+            //this.activeObstacles.remove(o);
+            //o.destroy();
             this.potion.setVelocityX(0);
             this.potion.setAccelerationX(0);
             this.isThrowing = false;
             //this.resetPotion();
             //destroy potion tween
-            this.tweens.add({
-                targets: this.potion,
+            this.add.tween({
+                targets: [p, o],
                 duration: 200,
                 ease: 'linear',
                 alpha: 0,
@@ -105,10 +103,12 @@ class Play extends Phaser.Scene{
                 //setScaleY: .2,
                 onComplete: function() {
                     this.resetPotion();
+                    this.activeObstacles.remove(o);
+                    o.destroy();
+                    delete activeY[currentY];
                 },
                 onCompleteScope: this,
             });
-            delete activeY[currentY];
         }, null, this);
 
     }
