@@ -25,9 +25,16 @@ class Play extends Phaser.Scene{
         //affects slide
         this.ACCELERATIONX = 5000;
         this.ACCELERATIONY = 10000;
-        this.DRAG = 2000;
+        this.DRAG = 500;
         this.MAXVELOCITYX = 400;
         this.MAXVELOCITYY = 900;
+
+        this.elements = {
+            NONE: 0,
+            FIRE: 1,
+            WATER: 2,
+            GRASS: 3
+        }
 
         //player stuff
         this.player = this.physics.add.sprite(game.config.width/7, game.config.height/2, 'player').setScale(.3);
@@ -78,7 +85,7 @@ class Play extends Phaser.Scene{
         this.potion = this.physics.add.sprite(0, 0, 'potion').setScale(.1);
         this.potion.visible = false;
         this.isThrowing = false;
-        this.potion.element = 'fire';
+        this.potion.element = this.elements.NONE;
         console.log(this.potion.element);
 
         //player collides with obstacle (game over)
@@ -89,29 +96,31 @@ class Play extends Phaser.Scene{
         //potion collides with obstacle (get rid of obstacle and reset potion)
         //p = potion, o = obstacle
         this.physics.add.collider(this.potion, this.activeObstacles, function(p,o) {
-            let currentY = o.y;
-            //this.activeObstacles.remove(o);
-            //o.destroy();
-            this.potion.setVelocityX(0);
-            this.potion.setAccelerationX(0);
-            this.isThrowing = false;
-            //this.resetPotion();
-            //destroy potion tween
-            this.add.tween({
-                targets: [p, o],
-                duration: 200,
-                ease: 'linear',
-                alpha: 0,
-                //setScaleX: .2,
-                //setScaleY: .2,
-                onComplete: function() {
-                    this.resetPotion();
-                    this.activeObstacles.remove(o);
-                    o.destroy();
-                    delete activeY[currentY];
-                },
-                onCompleteScope: this,
-            });
+            if(p.element == o.element){
+                let currentY = o.y;
+                //this.activeObstacles.remove(o);
+                //o.destroy();
+                this.potion.setVelocityX(0);
+                this.potion.setAccelerationX(0);
+                this.isThrowing = false;
+                //this.resetPotion();
+                //destroy potion tween
+                this.add.tween({
+                    targets: [p, o],
+                    duration: 200,
+                    ease: 'linear',
+                    alpha: 0,
+                    //setScaleX: .2,
+                    //setScaleY: .2,
+                    onComplete: function() {
+                        this.resetPotion();
+                        this.activeObstacles.remove(o);
+                        o.destroy();
+                        delete activeY[currentY];
+                    },
+                    onCompleteScope: this,
+                });
+            }
         }, null, this);
     }
 
@@ -126,7 +135,15 @@ class Play extends Phaser.Scene{
             this.inactiveObstacles.remove(obstacle);
         } else {
             obstacle = this.physics.add.sprite(x * 1.5, game.config.height * .6, element);
-            obstacle.type = element; //set element so potion can detect it
+            //set element so potion can detect it
+            switch(element){
+                case 'fire':
+                    obstacle.element = this.elements.FIRE;
+                case 'water':
+                    obstacle.element = this.elements.WATER;
+                case 'grass':
+                    obstacle.element = this.elements.GRASS;
+            }
             //randomize y
             obstacle.y = 200 * Phaser.Math.Between(1, 3);
             let currentY = obstacle.y;
@@ -177,13 +194,13 @@ class Play extends Phaser.Scene{
         //throwing different potions
         if(!this.isThrowing){
             if(Phaser.Input.Keyboard.JustDown(keyQ)){
-                this.throwPotion();
+                this.throwPotion(this.elements.FIRE);
             }
             else if(Phaser.Input.Keyboard.JustDown(keyW)){
-                this.throwPotion();
+                this.throwPotion(this.elements.WATER);
             }
             else if(Phaser.Input.Keyboard.JustDown(keyE)){
-                this.throwPotion();
+                this.throwPotion(this.elements.GRASS);
             }
         }
         else{
@@ -248,7 +265,7 @@ class Play extends Phaser.Scene{
         
     }
 
-    throwPotion(){
+    throwPotion(newElement){
         //particle effects
         this.woosh = this.add.particles('spark').createEmitter({
             speed: 100,
@@ -257,7 +274,7 @@ class Play extends Phaser.Scene{
             follow: this.potion
         });
         //change type DO LATER
-
+        this.element = newElement;
         this.isThrowing = true;
         this.potion.visible = true;
         this.potion.alpha = 100;

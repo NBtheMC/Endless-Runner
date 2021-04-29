@@ -20,7 +20,7 @@ let gameOptions = {
     obstacleStartSpeed: 350,
     spawnRange: [100, 350],
     obstacleSizeRange: [50, 250],
-    element: -1
+    //element: -1
 }
 
 let game = new Phaser.Game(config);
