@@ -31,3 +31,6 @@ let cursors; //movement keys
 let keySpace; //select key
 let keyQ, keyW, keyE; //prompt keys
 
+// Group of y-axes being used for obstacle spawning.
+let activeY = {};
+

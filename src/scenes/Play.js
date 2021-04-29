@@ -13,6 +13,7 @@ class Play extends Phaser.Scene{
 
     create(){
         console.log("play");
+        activeY = {};
         //affects slide
         this.ACCELERATIONX = 5000;
         this.ACCELERATIONY = 10000;
@@ -76,12 +77,15 @@ class Play extends Phaser.Scene{
         }, this);
 
         //potion collides with obstacle (get rid of obstacle and reset potion)
-        //p = potion o is obstacle
+        //p = potion, o is obstacle
         this.physics.add.collider(this.potion, this.activeObstacles, function(p,o) {
+            let currentY = o.y;
             this.activeObstacles.remove(o);
             o.destroy();
             this.resetPotion();
+            delete activeY[currentY];
         }, null, this);
+
     }
 
     // Adds obstacle
@@ -95,16 +99,31 @@ class Play extends Phaser.Scene{
             this.inactiveObstacles.remove(obstacle);
         } else {
             obstacle = this.physics.add.sprite(x * 1.5, game.config.height * .6, element);
+
             //randomize y
             obstacle.y = 200 * Phaser.Math.Between(1, 3);
-            obstacle.setScale(.1); //sprites a bit too big
-            obstacle.setVelocityX(gameOptions.obstacleStartSpeed * -3);
+            let currentY = obstacle.y;
+            if(!Object.values(activeY).includes(currentY)) {
+                //console.log("The current y is " + currentY);
 
-            this.activeObstacles.add(obstacle);
+                // Change size of temp assets
+                if (gameOptions.element == 1 || gameOptions.element == 3) {
+                    obstacle.setScale(.1); //sprites a bit too big
+                } else {
+                    obstacle.setScale(.25);
+                }
+
+                obstacle.setVelocityX(gameOptions.obstacleStartSpeed * -3);
+
+                this.activeObstacles.add(obstacle);
+                
+                activeY[currentY] = currentY;
+            }
         }
     }    
 
     update(){
+        console.log(activeY);
         //movement y
         if(cursors.up.isDown){
             this.player.body.setAccelerationY(-this.ACCELERATIONY);
@@ -147,22 +166,24 @@ class Play extends Phaser.Scene{
 
         // Obstacles
         this.activeObstacles.getChildren().forEach(function(obstacle) {
-            console.log(gameOptions.element);
             // Destroy obstacles if player presses a key
             // Fire
             if(this.activeObstacles.getLength() > 0 && Phaser.Input.Keyboard.JustDown(keyQ) && gameOptions.element == 1) {
+                delete activeY[obstacle.y];
                 this.activeObstacles.killAndHide(obstacle);
                 this.activeObstacles.remove(obstacle);
                 this.destroyPrompt();
             }
             // Grass
             if(this.activeObstacles.getLength() > 0 && Phaser.Input.Keyboard.JustDown(keyW) && gameOptions.element == 2) {
+                delete activeY[obstacle.y];
                 this.activeObstacles.killAndHide(obstacle);
                 this.activeObstacles.remove(obstacle);
                 this.destroyPrompt();
             }
             // Water
             if(this.activeObstacles.getLength() > 0 && Phaser.Input.Keyboard.JustDown(keyE) && gameOptions.element == 3) {
+                delete activeY[obstacle.y];
                 this.activeObstacles.killAndHide(obstacle);
                 this.activeObstacles.remove(obstacle);
                 this.destroyPrompt();
@@ -170,6 +191,7 @@ class Play extends Phaser.Scene{
 
             // Destroy obstacles if they go past the screen
             if(obstacle.x < 0) {
+                delete activeY[obstacle.y];
                 this.activeObstacles.killAndHide(obstacle);
                 this.activeObstacles.remove(obstacle);
                 this.destroyPrompt();
@@ -178,20 +200,20 @@ class Play extends Phaser.Scene{
 
 
         // add new obstacles
-        if(this.activeObstacles.getLength() < 1) {
+        if(this.activeObstacles.getLength() < 2) {
             let value = Phaser.Math.Between(1, 3);
             gameOptions.element = value;
             if(value == 1) {
                 this.addObstacle(game.config.width, 'fire');
-                setTimeout(() => { this.showPrompt()}, 500);
+                //setTimeout(() => { this.showPrompt()}, 500);
             }
             if(value == 2) {
                 this.addObstacle(game.config.width, 'grass');
-                setTimeout(() => { this.showPrompt()}, 500);
+                //setTimeout(() => { this.showPrompt()}, 500);
             }
             if(value == 3) {
                 this.addObstacle(game.config.width, 'water');
-                setTimeout(() => { this.showPrompt()}, 500);
+                //setTimeout(() => { this.showPrompt()}, 500);
             }
         } 
         
