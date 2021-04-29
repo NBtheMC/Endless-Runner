@@ -110,7 +110,7 @@ class Play extends Phaser.Scene{
                 if (gameOptions.element == 1 || gameOptions.element == 3) {
                     obstacle.setScale(.1); //sprites a bit too big
                 } else {
-                    obstacle.setScale(.25);
+                    obstacle.setScale(.2);
                 }
 
                 obstacle.setVelocityX(gameOptions.obstacleStartSpeed * -3);
