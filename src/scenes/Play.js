@@ -15,7 +15,7 @@ class Play extends Phaser.Scene{
     create(){
         //invisible wall at top
         this.topBarrier = this.physics.add.sprite(0, 0, 1800,game.config.height/3);
-        this.topBarrier.setSize(game.config.width,game.config.height/3, game.config.width,game.config.height/3);
+        this.topBarrier.body.setSize(game.config.width,game.config.height/3, game.config.width,game.config.height/3);
         this.topBarrier.setImmovable(true);
         console.log("play");
         this.background = this.add.tileSprite(0,0,1800,720,'background').setOrigin(0,0);
@@ -82,21 +82,31 @@ class Play extends Phaser.Scene{
             this.scene.start('menuScene');
         }, this);
 
+        //tween
+        //let scene = this;
+
         //potion collides with obstacle (get rid of obstacle and reset potion)
         //p = potion, o = obstacle
         this.physics.add.collider(this.potion, this.activeObstacles, function(p,o) {
             let currentY = o.y;
             this.activeObstacles.remove(o);
             o.destroy();
+            this.potion.setVelocityX(0);
+            this.potion.setAccelerationX(0);
+            this.isThrowing = false;
             //this.resetPotion();
             //destroy potion tween
             this.tweens.add({
                 targets: this.potion,
-                duration: 1000,
+                duration: 200,
                 ease: 'linear',
                 alpha: 0,
-                onComplete: this.resetPotion(),
-                onCompleteScope: this
+                //setScaleX: .2,
+                //setScaleY: .2,
+                onComplete: function() {
+                    this.resetPotion();
+                },
+                onCompleteScope: this,
             });
             delete activeY[currentY];
         }, null, this);
@@ -178,7 +188,7 @@ class Play extends Phaser.Scene{
             if(this.potion.x >= game.config.width){
                 this.resetPotion();
             }
-            this.potion.body.setVelocityX(1200);
+            this.potion.body.setVelocityX(600);
         }
 
         // Obstacles
@@ -239,8 +249,8 @@ class Play extends Phaser.Scene{
     throwPotion(){
         //change type DO LATER
         this.isThrowing = true;
-        this.potion.alpha = 100;
         this.potion.visible = true;
+        this.potion.alpha = 100;
         this.potion.x = this.player.x;
         this.potion.y = this.player.y;
     }
