@@ -77,7 +77,9 @@ class Play extends Phaser.Scene{
         this.potion = this.physics.add.sprite(0, 0, 'potion').setScale(.1);
         this.potion.visible = false;
         this.isThrowing = false;
-
+        this.potion.element = 'fire';
+        console.log(this.potion.element);
+        
         //player collides with obstacle (game over)
         this.physics.add.collider(this.player, this.activeObstacles, null, function() {
             this.scene.start('menuScene');
@@ -188,7 +190,7 @@ class Play extends Phaser.Scene{
             if(this.potion.x >= game.config.width){
                 this.resetPotion();
             }
-            this.potion.body.setVelocityX(600);
+            this.potion.body.setVelocityX(1200);
         }
 
         // Obstacles
