@@ -146,10 +146,13 @@ class Play extends Phaser.Scene{
             switch(element){
                 case 'fire':
                     obstacle.element = this.elements.FIRE;
+                    break;
                 case 'water':
                     obstacle.element = this.elements.WATER;
+                    break;
                 case 'grass':
                     obstacle.element = this.elements.GRASS;
+                    break;
             }
             //randomize y
             obstacle.y = 200 * Phaser.Math.Between(1, 3);
