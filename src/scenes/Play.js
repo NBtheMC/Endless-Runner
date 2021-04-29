@@ -10,6 +10,7 @@ class Play extends Phaser.Scene{
         this.load.image('grass', 'assets/tempgrass.png');
         this.load.image('potion', 'assets/temppotion.png');
         this.load.image('background', 'assets/tempbackground.png');
+        this.load.image('spark', 'assets/tempspark.png');
     }
 
     create(){
@@ -79,7 +80,7 @@ class Play extends Phaser.Scene{
         this.isThrowing = false;
         this.potion.element = 'fire';
         console.log(this.potion.element);
-        
+
         //player collides with obstacle (game over)
         this.physics.add.collider(this.player, this.activeObstacles, null, function() {
             this.scene.start('menuScene');
@@ -112,7 +113,6 @@ class Play extends Phaser.Scene{
                 onCompleteScope: this,
             });
         }, null, this);
-
     }
 
     // Adds obstacle
@@ -249,7 +249,15 @@ class Play extends Phaser.Scene{
     }
 
     throwPotion(){
+        //particle effects
+        this.woosh = this.add.particles('spark').createEmitter({
+            speed: 100,
+            gravity: { x: 0, y: 200 },
+            scale: { start: 0.1, end: 1 },
+            follow: this.potion
+        });
         //change type DO LATER
+
         this.isThrowing = true;
         this.potion.visible = true;
         this.potion.alpha = 100;
@@ -258,12 +266,13 @@ class Play extends Phaser.Scene{
     }
 
     resetPotion(){
+        this.woosh.stop();
         this.isThrowing = false;
         this.potion.visible = false;
         this.potion.setVelocityX(0);
         this.potion.setAccelerationX(0);
-        this.potion.x = 0;
-        this.potion.y = 0;
+        this.potion.x = -500;
+        this.potion.y = -500;
     }
 
     showPrompt() {
