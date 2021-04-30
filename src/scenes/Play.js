@@ -14,7 +14,12 @@ class Play extends Phaser.Scene{
     }
 
     create(){
-        //invisible wall at top
+        // Record the start time
+        this.start = this.getTime();
+        // Initalize points for destroying objects
+        bonus = 0;
+
+        // Invisible wall at top
         this.topBarrier = this.physics.add.sprite(game.config.width/2, 0, 1800,game.config.height/3);
         this.topBarrier.body.setSize(game.config.width, game.config.height/3);
         //this.topBarrier.body.setSize(100,100);
@@ -22,13 +27,15 @@ class Play extends Phaser.Scene{
         console.log("play");
         this.background = this.add.tileSprite(0,0,1800,720,'background').setOrigin(0,0);
         activeY = {};
-        //affects slide
+
+        // affects slide
         this.ACCELERATIONX = 5000;
         this.ACCELERATIONY = 10000;
         this.DRAG = 500;
         this.MAXVELOCITYX = 400;
         this.MAXVELOCITYY = 900;
 
+        // Element options for Obstacles and Potions
         this.elements = {
             NONE: 0,
             FIRE: 1,
@@ -36,17 +43,17 @@ class Play extends Phaser.Scene{
             GRASS: 3
         }
 
-        //player stuff
+        // Player stuff
         this.player = this.physics.add.sprite(game.config.width/7, game.config.height/2, 'player').setScale(.3);
         this.player.setCollideWorldBounds(true);
         this.player.body.setMaxVelocity(this.MAXVELOCITYX,this.MAXVELOCITYY)
         this.player.body.setDragX(this.DRAG);
         this.player.body.setDragY(this.DRAG);
         cursors = this.input.keyboard.createCursorKeys();
-
+        // Collider between Player and Top Barrier
         this.physics.add.collider(this.player, this.topBarrier);
 
-        //obstacle stuff
+        // Obstacle stuff
         // Create group of active obstacles
         this.activeObstacles = this.add.group({
         });
@@ -56,62 +63,38 @@ class Play extends Phaser.Scene{
             removeCallback: function(obstacle){
                 obstacle.scene.activeObstacles.add(obstacle)
             }
-        });
+        }); 
 
-        // Prompt
-        let promptConfig = {
-            fontFamily: 'Verdana',
-            fontSize: '28px',
-            backgroundColor: '#FFFFFF',
-            color: '#000000',
-            align: 'left',
-            padding: {
-                top: 5,
-                bottom: 5,
-                right: 5,
-                left: 5,
-            }
-        }
-        this.firePrompt = this.add.text(200, 100, 'Press Q!', promptConfig).setOrigin(0.5).setVisible(false);
-        this.grassPrompt = this.add.text(200, 100, 'Press W!', promptConfig).setOrigin(0.5).setVisible(false);
-        this.waterPrompt = this.add.text(200, 100, 'Press E!', promptConfig).setOrigin(0.5).setVisible(false);    
-
-        // potion stuff
-        // set prompt inputs
+        // Potion stuff
+        // Set prompt inputs
         keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
        
+        // Set the potion
         this.potion = this.physics.add.sprite(0, 0, 'potion').setScale(.1);
         this.potion.visible = false;
         this.isThrowing = false;
         this.potion.element = this.elements.NONE;
-        console.log(this.potion.element);
 
-        //player collides with obstacle (game over)
-        this.physics.add.collider(this.player, this.activeObstacles, null, function() {
-            this.scene.start('menuScene');
-        }, this);
-
-        //potion collides with obstacle (get rid of obstacle and reset potion)
-        //p = potion, o = obstacle
+        // Potion collides with obstacle (get rid of obstacle and reset potion)
+        // p = potion, o = obstacle
         this.physics.add.collider(this.potion, this.activeObstacles, function(p,o) {
+            // Velocity & Acceleration of Potion
             this.potion.setVelocityX(0);
             this.potion.setAccelerationX(0);
-            o.setVelocityX(0);
+            // Velocity & Acceleration of Obstacle Hit
+            o.setVelocityX(gameOptions.obstacleStartSpeed * -3);
             o.setAccelerationX(0);
+            // If potion element matches the obstacle element
             if(p.element == o.element){
                 let currentY = o.y;
-                //this.activeObstacles.remove(o);
-                //o.destroy();
-                this.potion.setVelocityX(0);
-                this.potion.setAccelerationX(0);
                 this.isThrowing = false;
                 //this.resetPotion();
                 //destroy potion tween
                 this.add.tween({
                     targets: [p, o],
-                    duration: 200,
+                    duration: 100,
                     ease: 'linear',
                     alpha: 0,
                     //setScaleX: .2,
@@ -121,6 +104,7 @@ class Play extends Phaser.Scene{
                         this.activeObstacles.remove(o);
                         o.destroy();
                         delete activeY[currentY];
+                        this.bonusAdd(1);
                     },
                     onCompleteScope: this,
                 });
@@ -129,11 +113,27 @@ class Play extends Phaser.Scene{
                 this.resetPotion();
             }
         }, null, this);
-    }
 
+        // Player collides with obstacle (game over)
+        this.physics.add.collider(this.player, this.activeObstacles, null, function() {
+            // INCLUDE WAY TO SHOW HIGH SCORE
+            this.scene.start('menuScene');
+        }, this);
+
+        // Score
+        let scoreConfig = {
+            fontFamily: 'Verdana',
+            fontSize: '28px',
+            backgroundColor: '#FFFFFF',
+            color: '#000000',
+            align: 'left',
+        }
+        timerText = this.add.text(200, 100, score, scoreConfig).setOrigin(0.5).setVisible(true);
+    }
     // Adds obstacle
     addObstacle(x, element){
         let obstacle;
+        // If there are inactive obstacles, make them active
         if(this.inactiveObstacles.getLength()){
             obstacle = this.inactiveObstacles.getFirst();
             obstacle.x = x;
@@ -142,7 +142,7 @@ class Play extends Phaser.Scene{
             this.inactiveObstacles.remove(obstacle);
         } else {
             obstacle = this.physics.add.sprite(x * 1.5, game.config.height * .6, element)
-            //set element so potion can detect it
+            // Set element so potion can detect it
             switch(element){
                 case 'fire':
                     obstacle.element = this.elements.FIRE;
@@ -154,32 +154,34 @@ class Play extends Phaser.Scene{
                     obstacle.element = this.elements.GRASS;
                     break;
             }
-            //randomize y
+            // Randomize y
             obstacle.y = 200 * Phaser.Math.Between(1, 3);
             let currentY = obstacle.y;
             if(!Object.values(activeY).includes(currentY)) {
-                //console.log("The current y is " + currentY);
-
                 // Change size of temp assets
                 if (gameOptions.element == 1 || gameOptions.element == 3) {
                     obstacle.setScale(.1); //sprites a bit too big
                 } else {
                     obstacle.setScale(.2);
                 }
-
                 obstacle.setVelocityX(gameOptions.obstacleStartSpeed * -3);
-
                 this.activeObstacles.add(obstacle);
-                
                 activeY[currentY] = currentY;
             }
         }
     }    
 
     update(){
+        // Score stuff:
+        // Updates timer
+        timer = this.getTime() - this.start;
+        // Sets score to timer + bonus amount
+        score = timer + bonus;
+        // Updates score text to reflect current score
+        timerText.setText(score);
+
         //parallax ooooh
         this.background.tilePositionX += 33;
-        //console.log(activeY);
         //movement y
         if(cursors.up.isDown){
             this.player.body.setAccelerationY(-this.ACCELERATIONY);
@@ -201,7 +203,7 @@ class Play extends Phaser.Scene{
             this.player.body.setAccelerationX(0);
         }
 
-        //throwing different potions
+        // Throwing different potions
         if(!this.isThrowing){
             if(Phaser.Input.Keyboard.JustDown(keyQ)){
                 this.throwPotion(this.elements.FIRE);
@@ -222,40 +224,15 @@ class Play extends Phaser.Scene{
 
         // Obstacles
         this.activeObstacles.getChildren().forEach(function(obstacle) {
-            // // Destroy obstacles if player presses a key
-            // // Fire
-            // if(this.activeObstacles.getLength() > 0 && Phaser.Input.Keyboard.JustDown(keyQ) && gameOptions.element == 1) {
-            //     delete activeY[obstacle.y];
-            //     this.activeObstacles.killAndHide(obstacle);
-            //     this.activeObstacles.remove(obstacle);
-            //     this.destroyPrompt();
-            // }
-            // // Grass
-            // if(this.activeObstacles.getLength() > 0 && Phaser.Input.Keyboard.JustDown(keyW) && gameOptions.element == 2) {
-            //     delete activeY[obstacle.y];
-            //     this.activeObstacles.killAndHide(obstacle);
-            //     this.activeObstacles.remove(obstacle);
-            //     this.destroyPrompt();
-            // }
-            // // Water
-            // if(this.activeObstacles.getLength() > 0 && Phaser.Input.Keyboard.JustDown(keyE) && gameOptions.element == 3) {
-            //     delete activeY[obstacle.y];
-            //     this.activeObstacles.killAndHide(obstacle);
-            //     this.activeObstacles.remove(obstacle);
-            //     this.destroyPrompt();
-            // }
-
             // Destroy obstacles if they go past the screen
             if(obstacle.x < 0) {
                 delete activeY[obstacle.y];
                 this.activeObstacles.killAndHide(obstacle);
                 this.activeObstacles.remove(obstacle);
-                this.destroyPrompt();
             }
         }, this);
-
-
-        // add new obstacles
+        
+        // Add new obstacles
         if(this.activeObstacles.getLength() < 2) {
             let value = Phaser.Math.Between(1, 3);
             gameOptions.element = value;
@@ -272,18 +249,18 @@ class Play extends Phaser.Scene{
                 //setTimeout(() => { this.showPrompt()}, 500);
             }
         } 
-        
     }
 
+    // EXTERNAL FUNCTIONS
     throwPotion(newElement){
-        //particle effects
+        // Particle effects
         this.woosh = this.add.particles('spark').createEmitter({
             speed: 100,
             gravity: { x: 0, y: 200 },
             scale: { start: 0.1, end: 1 },
             follow: this.potion
         });
-        //change type DO LATER
+        // Change type
         this.potion.element = newElement;
         this.isThrowing = true;
         this.potion.visible = true;
@@ -302,28 +279,20 @@ class Play extends Phaser.Scene{
         this.potion.y = -500;
     }
 
-    showPrompt() {
-        let value = gameOptions.element;
-        if(value == 1) {
-            this.firePrompt.setVisible(true);
-        }
-        if(value == 2) {
-            this.grassPrompt.setVisible(true);
-        }
-        if(value == 3) {
-            this.waterPrompt.setVisible(true);
-        }
+    getTime() {
+        // Used to keep track of score
+        //make a new date object
+        let d = new Date();
+        //return the number of milliseconds since 1 January 1970 00:00:00.
+        return d.getTime();
     }
 
-    destroyPrompt() {
-        if(gameOptions.element == 1) {
-            this.firePrompt.setVisible(false);
-        }
-        if(gameOptions.element == 2) {
-            this.grassPrompt.setVisible(false);
-        }
-        if(gameOptions.element == 3) {
-            this.waterPrompt.setVisible(false);
+    bonusAdd(x) {
+        // Used to update bonus points for destroying obstacles
+        // This will execute 7-8 times as of right now, so players will get
+        // 7000-8000 bonus points for destroying an obstacle.
+        if (x == 1) {
+            bonus += 1000;
         }
     }
 }
