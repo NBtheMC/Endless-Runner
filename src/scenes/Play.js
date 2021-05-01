@@ -30,10 +30,10 @@ class Play extends Phaser.Scene{
 
         // affects slide
         this.ACCELERATIONX = 5000;
-        this.ACCELERATIONY = 10000;
-        this.DRAG = 500;
+        this.ACCELERATIONY = 5000;
+        this.DRAG = 2000;
         this.MAXVELOCITYX = 400;
-        this.MAXVELOCITYY = 900;
+        this.MAXVELOCITYY = 800;
 
         // Element options for Obstacles and Potions
         this.elements = {
