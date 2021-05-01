@@ -32,8 +32,8 @@ class Play extends Phaser.Scene{
         this.ACCELERATIONX = 5000;
         this.ACCELERATIONY = 5000;
         this.DRAG = 2000;
-        this.MAXVELOCITYX = 400 * deltaMultiplier;
-        this.MAXVELOCITYY = 800 * deltaMultiplier;
+        this.MAXVELOCITYX = 400;
+        this.MAXVELOCITYY = 800;
 
         // Element options for Obstacles and Potions
         this.elements = {
@@ -84,7 +84,7 @@ class Play extends Phaser.Scene{
             this.potion.setVelocityX(0);
             this.potion.setAccelerationX(0);
             // Velocity & Acceleration of Obstacle Hit
-            o.setVelocityX(gameOptions.obstacleStartSpeed * -3 * deltaMultiplier);
+            o.setVelocityX(gameOptions.obstacleStartSpeed * -3);
             o.setAccelerationX(0);
             // If potion element matches the obstacle element
             if(p.element == o.element){
@@ -164,7 +164,7 @@ class Play extends Phaser.Scene{
                 } else {
                     obstacle.setScale(.2);
                 }
-                obstacle.setVelocityX(gameOptions.obstacleStartSpeed * -3 * deltaMultiplier);
+                obstacle.setVelocityX(gameOptions.obstacleStartSpeed * -3);
                 this.activeObstacles.add(obstacle);
                 activeY[currentY] = currentY;
             }
@@ -182,7 +182,7 @@ class Play extends Phaser.Scene{
         timerText.setText(score);
 
         //parallax ooooh
-        this.background.tilePositionX += 33 * deltaMultiplier;
+        this.background.tilePositionX += 33;
         //movement y
         if(cursors.up.isDown){
             this.player.body.setAccelerationY(-this.ACCELERATIONY);
