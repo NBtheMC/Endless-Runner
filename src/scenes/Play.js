@@ -29,9 +29,9 @@ class Play extends Phaser.Scene{
         activeY = {};
 
         // affects slide
-        this.ACCELERATIONX = 5000;
-        this.ACCELERATIONY = 5000;
-        this.DRAG = 2000;
+        this.ACCELERATIONX = 4000;
+        this.ACCELERATIONY = 4000;
+        this.DRAG = 2500;
         this.MAXVELOCITYX = 400;
         this.MAXVELOCITYY = 800;
 
@@ -64,6 +64,8 @@ class Play extends Phaser.Scene{
                 obstacle.scene.activeObstacles.add(obstacle)
             }
         }); 
+        //scales linear with time
+        this.speedMultiplier = 1;
 
         // Potion stuff
         // Set prompt inputs
@@ -164,7 +166,7 @@ class Play extends Phaser.Scene{
                 } else {
                     obstacle.setScale(.2);
                 }
-                obstacle.setVelocityX(gameOptions.obstacleStartSpeed * -3);
+                obstacle.setVelocityX(gameOptions.obstacleStartSpeed * -3 * this.speedMultiplier);
                 this.activeObstacles.add(obstacle);
                 activeY[currentY] = currentY;
             }
@@ -172,6 +174,7 @@ class Play extends Phaser.Scene{
     }    
 
     update(time, delta){
+        this.speedMultiplier *= 1.001;
         deltaMultiplier = (delta/16.66667);
         // Score stuff:
         // Updates timer
