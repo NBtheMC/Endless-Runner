@@ -32,11 +32,16 @@ class Menu extends Phaser.Scene {
 
         // Define Keys
         keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        keyLeft = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
+        keyRight = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
     }
 
     update() {
         if(Phaser.Input.Keyboard.JustDown(keySpace)){
             this.scene.start('playScene');    
+        }
+        if(Phaser.Input.Keyboard.JustDown(keyLeft)){
+            this.scene.start('creditScene');    
         }
     }
 }

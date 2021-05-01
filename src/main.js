@@ -12,7 +12,7 @@ let config = {
             // }
         }
     },
-    scene: [Menu, Play, Tutorial]
+    scene: [Menu, Play, Tutorial, Credits]
 }
 
 let gameOptions = {
@@ -27,7 +27,7 @@ let game = new Phaser.Game(config);
 //globals
 let cursors; //movement keys
 let keySpace; //select key
-let keyQ, keyW, keyE; //prompt keys
+let keyQ, keyW, keyE, keyLeft, keyRight; //prompt keys
 let timer, score, bonus, timerText, deltaMultiplier;
 
 // Group of y-axes being used for obstacle spawning.
