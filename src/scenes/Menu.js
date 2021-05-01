@@ -24,11 +24,13 @@ class Menu extends Phaser.Scene {
             fixedWidth: 0
         }
 
+        let customHeight = 50;
         // Menu Text
-        this.add.text(game.config.width/2, game.config.height/2, "Bill Hader's Wizard Adventure!", menuConfig).setOrigin(0.5);
-        this.add.text(game.config.width/2, game.config.height/2 + 50, 'Use the arrow keys to dodge incoming obstacles', menuConfig).setOrigin(0.5);
-        this.add.text(game.config.width/2, game.config.height/2 + 100, 'or press the prompt in time to destroy them and get more points', menuConfig).setOrigin(0.5);
-        this.add.text(game.config.width/2, game.config.height/2 + 150, 'Press Space to start!', menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2 - customHeight, "Bill Hader's Wizard Adventure!", menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2, 'Use the arrow keys to dodge incoming obstacles', menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2 + customHeight, 'or press the prompt in time to destroy them and get more points', menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2 + 2 * customHeight, 'Press Space to start!', menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2 + 3 * customHeight, 'Press <- for Credits and -> for Tutorial!', menuConfig).setOrigin(0.5);
 
         // Define Keys
         keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
@@ -42,6 +44,9 @@ class Menu extends Phaser.Scene {
         }
         if(Phaser.Input.Keyboard.JustDown(keyLeft)){
             this.scene.start('creditScene');    
+        }
+        if(Phaser.Input.Keyboard.JustDown(keyRight)){
+            this.scene.start('tutorialScene');    
         }
     }
 }
