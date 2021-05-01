@@ -28,7 +28,7 @@ let game = new Phaser.Game(config);
 let cursors; //movement keys
 let keySpace; //select key
 let keyQ, keyW, keyE; //prompt keys
-let timer, score, bonus, timerText;
+let timer, score, bonus, timerText, deltaMultiplier;
 
 // Group of y-axes being used for obstacle spawning.
 let activeY = {};

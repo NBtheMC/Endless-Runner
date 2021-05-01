@@ -29,11 +29,11 @@ class Play extends Phaser.Scene{
         activeY = {};
 
         // affects slide
-        this.ACCELERATIONX = 5000;
-        this.ACCELERATIONY = 5000;
-        this.DRAG = 2000;
-        this.MAXVELOCITYX = 400;
-        this.MAXVELOCITYY = 800;
+        this.ACCELERATIONX = 5000 * deltaMultiplier;
+        this.ACCELERATIONY = 5000 * deltaMultiplier;
+        this.DRAG = 2000 * deltaMultiplier;
+        this.MAXVELOCITYX = 400 * deltaMultiplier;
+        this.MAXVELOCITYY = 800 * deltaMultiplier;
 
         // Element options for Obstacles and Potions
         this.elements = {
@@ -84,7 +84,7 @@ class Play extends Phaser.Scene{
             this.potion.setVelocityX(0);
             this.potion.setAccelerationX(0);
             // Velocity & Acceleration of Obstacle Hit
-            o.setVelocityX(gameOptions.obstacleStartSpeed * -3);
+            o.setVelocityX(gameOptions.obstacleStartSpeed * -3 * deltaMultiplier);
             o.setAccelerationX(0);
             // If potion element matches the obstacle element
             if(p.element == o.element){
@@ -94,15 +94,15 @@ class Play extends Phaser.Scene{
                 //destroy potion tween
                 this.add.tween({
                     targets: [p, o],
-                    duration: 100,
+                    duration: 50,
                     ease: 'linear',
                     alpha: 0,
                     //setScaleX: .2,
                     //setScaleY: .2,
                     onComplete: function() {
-                        this.resetPotion();
                         this.activeObstacles.remove(o);
                         o.destroy();
+                        this.resetPotion();
                         delete activeY[currentY];
                         this.bonusAdd(1);
                     },
@@ -164,14 +164,15 @@ class Play extends Phaser.Scene{
                 } else {
                     obstacle.setScale(.2);
                 }
-                obstacle.setVelocityX(gameOptions.obstacleStartSpeed * -3);
+                obstacle.setVelocityX(gameOptions.obstacleStartSpeed * -3 * deltaMultiplier);
                 this.activeObstacles.add(obstacle);
                 activeY[currentY] = currentY;
             }
         }
     }    
 
-    update(){
+    update(time, delta){
+        deltaMultiplier = (delta/16.66667);
         // Score stuff:
         // Updates timer
         timer = this.getTime() - this.start;
@@ -181,7 +182,7 @@ class Play extends Phaser.Scene{
         timerText.setText(score);
 
         //parallax ooooh
-        this.background.tilePositionX += 33;
+        this.background.tilePositionX += 33 * deltaMultiplier;
         //movement y
         if(cursors.up.isDown){
             this.player.body.setAccelerationY(-this.ACCELERATIONY);
