@@ -14,7 +14,9 @@ class Play extends Phaser.Scene{
         this.load.image('firePotion', 'assets/firePotion.png');
         this.load.image('waterPotion', 'assets/waterPotion.png');
         this.load.image('grassPotion', 'assets/grassPotion.png');
-        this.load.image('spark', 'assets/tempspark.png');
+        this.load.image('fireSpark', 'assets/fireSpark.png');
+        this.load.image('waterSpark', 'assets/waterSpark.png');
+        this.load.image('grassSpark', 'assets/grassSpark.png');
 
         this.load.image('background', 'assets/tempbackground.png');
         
@@ -122,11 +124,13 @@ class Play extends Phaser.Scene{
         keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
        
         // Set the potion
-        this.potion = this.physics.add.sprite(0, 0, 'firePotion').setScale(.3);
+        const potionScale = .3;
+        this.globalPotionScale = potionScale;
+        this.potion = this.physics.add.sprite(0, 0, 'firePotion').setScale(potionScale);
         this.potion.visible = false;
         this.isThrowing = false;
         this.potion.element = this.elements.NONE;
-
+        
         //sounds
         this.death = this.sound.add('on_death');
         this.wrong = this.sound.add('potion_destroy');
@@ -145,21 +149,21 @@ class Play extends Phaser.Scene{
             if(p.element == o.element){
                 this.right.play();
                 let currentY = o.y;
+                this.activeObstacles.remove(o);
+                o.destroy();
+                delete activeY[currentY];
                 this.isThrowing = false;
                 //this.resetPotion();
                 //destroy potion tween
                 this.add.tween({
-                    targets: [p, o],
-                    duration: 50,
+                    targets: p,
+                    duration: 300,
                     ease: 'linear',
                     alpha: 0,
-                    //setScaleX: .2,
-                    //setScaleY: .2,
+                    scaleX: potionScale*1.1,
+                    scaleY: potionScale*1.1,
                     onComplete: function() {
-                        this.activeObstacles.remove(o);
-                        o.destroy();
                         this.resetPotion();
-                        delete activeY[currentY];
                         this.bonusAdd(1);
                     },
                     onCompleteScope: this,
@@ -334,22 +338,34 @@ class Play extends Phaser.Scene{
 
     // EXTERNAL FUNCTIONS
     throwPotion(newElement){
-        // Particle effects
-        this.woosh = this.add.particles('spark').createEmitter({
-            speed: 100,
-            gravity: { x: 0, y: 200 },
-            scale: { start: 0.1, end: 1 },
-            follow: this.potion
-        });
         // Change type
         switch(newElement){
             case this.elements.FIRE:
+                // Particle effects
+                this.woosh = this.add.particles('waterSpark').createEmitter({
+                    speed: 100,
+                    gravity: { x: 0, y: 200 },
+                    scale: { start: 0.1, end: .5 },
+                    follow: this.potion
+                });
                 this.potion.setTexture('waterPotion');
                 break;
             case this.elements.WATER:
+                this.woosh = this.add.particles('grassSpark').createEmitter({
+                    speed: 100,
+                    gravity: { x: 0, y: 200 },
+                    scale: { start: 0.1, end: .5 },
+                    follow: this.potion
+                });
                 this.potion.setTexture('grassPotion');
                 break;
             case this.elements.GRASS:
+                this.woosh = this.add.particles('fireSpark').createEmitter({
+                    speed: 100,
+                    gravity: { x: 0, y: 200 },
+                    scale: { start: 0.1, end: .5 },
+                    follow: this.potion
+                });
                 this.potion.setTexture('firePotion');
                 break;
         }
@@ -368,6 +384,8 @@ class Play extends Phaser.Scene{
         this.potion.visible = false;
         this.potion.setVelocityX(0);
         this.potion.setAccelerationX(0);
+        this.potion.scaleX = this.globalPotionScale;
+        this.potion.scaleY = this.globalPotionScale;
         this.potion.x = -500;
         this.potion.y = -500;
     }
