@@ -10,11 +10,14 @@ class Play extends Phaser.Scene{
         this.load.image('fire', 'assets/tempfire.png');
         this.load.image('water', 'assets/tempwater.png');
         this.load.image('grass', 'assets/tempgrass.png');
-        // Potion Asset
-        this.load.image('potion', 'assets/temppotion.png');
-        this.load.image('background', 'assets/tempbackground.png');
+        // Potion Assets
+        this.load.image('firePotion', 'assets/firePotion.png');
+        this.load.image('waterPotion', 'assets/waterPotion.png');
+        this.load.image('grassPotion', 'assets/grassPotion.png');
         this.load.image('spark', 'assets/tempspark.png');
 
+        this.load.image('background', 'assets/tempbackground.png');
+        
         //TRANSITION STUFF
         // Actual transition assets
         this.load.image('sun', 'assets/transition/sun.png');
@@ -43,6 +46,12 @@ class Play extends Phaser.Scene{
         this.load.image('lvl3_foretrees', 'assets/level3/lvl3_foretrees.png');
         this.load.image('lvl3_ground', 'assets/level3/lvl3_ground.png');
         this.load.image('lvl3_foregrass', 'assets/level3/lvl3_foregrass.png');
+
+        //SOUND
+        this.load.audio('on_death', 'assets/onDeath.wav');
+        this.load.audio('potion_destroy', 'assets/potionDestroy.wav');
+        this.load.audio('obstacle_destroy', 'assets/obstacleDestroy.wav');
+
     }
 
     create(){
@@ -113,10 +122,15 @@ class Play extends Phaser.Scene{
         keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
        
         // Set the potion
-        this.potion = this.physics.add.sprite(0, 0, 'potion').setScale(.1);
+        this.potion = this.physics.add.sprite(0, 0, 'firePotion').setScale(.3);
         this.potion.visible = false;
         this.isThrowing = false;
         this.potion.element = this.elements.NONE;
+
+        //sounds
+        this.death = this.sound.add('on_death');
+        this.wrong = this.sound.add('potion_destroy');
+        this.right = this.sound.add('obstacle_destroy');
 
         // Potion collides with obstacle (get rid of obstacle and reset potion)
         // p = potion, o = obstacle
@@ -129,6 +143,7 @@ class Play extends Phaser.Scene{
             o.setAccelerationX(0);
             // If potion element matches the obstacle element
             if(p.element == o.element){
+                this.right.play();
                 let currentY = o.y;
                 this.isThrowing = false;
                 //this.resetPotion();
@@ -151,12 +166,15 @@ class Play extends Phaser.Scene{
                 });
             }
             else{
+                this.wrong.play();
                 this.resetPotion();
             }
         }, null, this);
 
         // Player collides with obstacle (game over)
         this.physics.add.collider(this.player, this.activeObstacles, null, function() {
+            this.death.play();
+            // INCLUDE DEATH ANIMATION HERE
             // INCLUDE WAY TO SHOW HIGH SCORE
             this.scene.start('menuScene');
             transition1.remove(false);
@@ -324,12 +342,24 @@ class Play extends Phaser.Scene{
             follow: this.potion
         });
         // Change type
+        switch(newElement){
+            case this.elements.FIRE:
+                this.potion.setTexture('waterPotion');
+                break;
+            case this.elements.WATER:
+                this.potion.setTexture('grassPotion');
+                break;
+            case this.elements.GRASS:
+                this.potion.setTexture('firePotion');
+                break;
+        }
         this.potion.element = newElement;
         this.isThrowing = true;
         this.potion.visible = true;
         this.potion.alpha = 100;
         this.potion.x = this.player.x;
         this.potion.y = this.player.y;
+        
     }
 
     resetPotion(){
