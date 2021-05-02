@@ -29,6 +29,7 @@ let cursors; //movement keys
 let keySpace; //select key
 let keyQ, keyW, keyE, keyLeft, keyRight; //prompt keys
 let timer, score, bonus, timerText, deltaMultiplier;
+let environment1, environment2, destroyTransition1, destroyTransition2, transition1, transition2;
 
 // Group of y-axes being used for obstacle spawning.
 let activeY = {};
