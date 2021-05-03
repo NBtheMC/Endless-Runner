@@ -245,6 +245,7 @@ class Play extends Phaser.Scene{
                     y: p.y,
                     lifespan: 500
                 });
+                //this.time.events.add(300, this.boom.destroy(), this);
                 this.resetPotion();
             }
         }, null, this);
