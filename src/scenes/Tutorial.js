@@ -27,8 +27,8 @@ class Tutorial extends Phaser.Scene{
         this.image = this.add.image(900, 360, 'tutorialImage');
         let customHeight = 50;
         this.add.text(game.config.width/2 - 350, game.config.height/2 + 0 * customHeight, "Press Arrow keys\n to move around", menuConfig).setOrigin(0.5);
-        this.add.text(game.config.width/2 + 550, game.config.height/2 + -1 * customHeight, "Throw Potions with\nQ, W, and E to\ndestroy obstacles!", menuConfig).setOrigin(0.5);
-        this.add.text(game.config.width/2 + 650, game.config.height/2 + 1 * customHeight, "Water Potion destroys Fire Obstacles\nGrass Potion destroys Water Obstacles\nFire Potion destroys Grass Obstacles", menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2 + 625, game.config.height/2 + -1 * customHeight, "Throw Potions with\nQ, W, and E\nto destroy obstacles!", menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2 + 625, game.config.height/2 + 1.5 * customHeight, "WATER Potion destroys FIRE Obstacles\nGRASS Potion destroys WATER Obstacles\nFIRE Potion destroys GRASS Obstacles", menuConfig).setOrigin(0.5);
 
         // Define Keys
         keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
