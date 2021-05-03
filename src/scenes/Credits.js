@@ -29,7 +29,7 @@ class Credits extends Phaser.Scene{
         this.add.text(game.config.width/2, game.config.height/2 + 0 * customHeight, "Miriam Perez", menuConfig).setOrigin(0.5);
         this.add.text(game.config.width/2, game.config.height/2 + 1 * customHeight, "Naman Bhushan", menuConfig).setOrigin(0.5);
         this.add.text(game.config.width/2, game.config.height/2 + 2 * customHeight, "Paul Lee", menuConfig).setOrigin(0.5);
-        this.add.text(game.config.width/2, game.config.height/2 + 3 * customHeight, "Press Space to go to the Menu!", menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2 + 5 * customHeight, "Press Space to go to the Menu!", menuConfig).setOrigin(0.5, 0);
 
         keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     }
