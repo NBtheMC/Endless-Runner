@@ -5,11 +5,12 @@ class Play extends Phaser.Scene{
 
     preload(){
         // Player Asset
-        this.load.image('player', 'assets/tempwizard.png');
+        //this.load.image('player', 'assets/tempwizard.png');
+        this.load.atlas('player', 'assets/playerSpritesheet.png','assets/playerSprites.json');
         // Obstacle Assets
-        this.load.image('fire', 'assets/tempfire.png');
-        this.load.image('water', 'assets/tempwater.png');
-        this.load.image('grass', 'assets/tempgrass.png');
+        this.load.image('fire', 'assets/obstacleFire.png');
+        this.load.image('water', 'assets/obstacleWater.png');
+        this.load.image('grass', 'assets/obstacleGrass.png');
         // Potion Assets
         this.load.image('firePotion', 'assets/firePotion.png');
         this.load.image('waterPotion', 'assets/waterPotion.png');
@@ -102,6 +103,51 @@ class Play extends Phaser.Scene{
 
         // Player stuff
         this.player = this.physics.add.sprite(game.config.width/7, game.config.height/2, 'player').setScale(.3);
+        let frameNames = this.textures.get('player').getFrameNames();
+        this.anims.create({
+            key: 'noPotion',
+            frames: [{
+                key: 'player',
+                frame: 'noPotionFrame1'
+            },{
+                key: 'player',
+                frame: 'noPotionFrame2'
+            },{
+                key: 'player',
+                frame: 'noPotionFrame3'
+            },{
+                key: 'player',
+                frame: 'noPotionFrame4'
+            },{
+                key: 'player',
+                frame: 'noPotionFrame5'
+            }],
+            frameRate: 8,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'potion',
+            frames: [{
+                key: 'player',
+                frame: 'potionFrame1'
+            },{
+                key: 'player',
+                frame: 'potionFrame2'
+            },{
+                key: 'player',
+                frame: 'potionFrame3'
+            },{
+                key: 'player',
+                frame: 'potionFrame4'
+            },{
+                key: 'player',
+                frame: 'potionFrame5'
+            }],
+            frameRate: 8,
+            repeat: -1
+        });
+        this.player.play('noPotion');
+
         this.player.setCollideWorldBounds(true);
         this.player.body.setMaxVelocity(this.MAXVELOCITYX,this.MAXVELOCITYY)
         this.player.body.setDragX(this.DRAG);
@@ -267,12 +313,7 @@ class Play extends Phaser.Scene{
             obstacle.y = 200 * Phaser.Math.Between(1, 3);
             let currentY = obstacle.y;
             if(!Object.values(activeY).includes(currentY)) {
-                // Change size of temp assets
-                if (gameOptions.element == 1 || gameOptions.element == 3) {
-                    obstacle.setScale(.1); //sprites a bit too big
-                } else {
-                    obstacle.setScale(.2);
-                }
+                obstacle.setScale(.4);
                 obstacle.setVelocityX(gameOptions.obstacleStartSpeed * -3 * this.speedMultiplier);
                 this.activeObstacles.add(obstacle);
                 activeY[currentY] = currentY;
@@ -412,7 +453,7 @@ class Play extends Phaser.Scene{
         this.potion.alpha = 100;
         this.potion.x = this.player.x;
         this.potion.y = this.player.y;
-        
+        this.player.play('noPotion');
     }
 
     resetPotion(){
@@ -432,6 +473,7 @@ class Play extends Phaser.Scene{
         this.potion.scaleY = this.globalPotionScale;
         this.potion.x = -500;
         this.potion.y = -500;
+        this.player.play('potion');
     }
 
     getTime() {
