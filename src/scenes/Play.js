@@ -17,6 +17,7 @@ class Play extends Phaser.Scene{
         this.load.image('fireSpark', 'assets/fireSpark.png');
         this.load.image('waterSpark', 'assets/waterSpark.png');
         this.load.image('grassSpark', 'assets/grassSpark.png');
+        this.load.image('smoke', 'assets/smokeParticle.png');
         // Card Assets
         this.load.image('fireCard', 'assets/wizard_cards_fire3.png');
         this.load.image('waterCard', 'assets/wizard_cards_water3.png');
@@ -136,10 +137,10 @@ class Play extends Phaser.Scene{
         this.waterCard = this.add.sprite(game.config.width/3, 100,'waterCard').setScale(cardScale);
         this.grassCard = this.add.sprite(game.config.width/2, 100,'grassCard').setScale(cardScale);
 
-        // Element Icons
-        this.fireIcon = this.add.sprite('fireIcon');
-        this.waterIcon = this.add.sprite('waterIcon');
-        this.grassIcon = this.add.sprite('grassIcon');
+        // Element Icons ***Will combine with obstacle sprite***
+        // this.fireIcon = this.add.sprite('fireIcon');
+        // this.waterIcon = this.add.sprite('waterIcon');
+        // this.grassIcon = this.add.sprite('grassIcon');
 
         // Set the potion
         const potionScale = .3;
@@ -189,6 +190,14 @@ class Play extends Phaser.Scene{
             }
             else{
                 this.wrong.play();
+                this.boom = this.add.particles('smoke').createEmitter({
+                    speed: 100,
+                    gravity: { x: 0, y: -200 },
+                    scale: { start: 0.1, end: .5 },
+                    x: p.x,
+                    y: p.y,
+                    lifespan: 500
+                });
                 this.resetPotion();
             }
         }, null, this);
