@@ -17,9 +17,15 @@ class Play extends Phaser.Scene{
         this.load.image('fireSpark', 'assets/fireSpark.png');
         this.load.image('waterSpark', 'assets/waterSpark.png');
         this.load.image('grassSpark', 'assets/grassSpark.png');
+        // Card Assets
+        this.load.image('fireCard', 'wizard_card_fire3.png');
+        this.load.image('waterCard', 'wizard_card_water3.png');
+        this.load.image('grassCard', 'wizard_card_grass3.png');
+        // Icon Assets
+        this.load.image('fireIcon', 'wizard_warn_fire1.png');
+        this.load.image('waterIcon', 'wizard_warn_water1.png');
+        this.load.image('grassIcon', 'wizard_warn_grass1.png');
 
-        this.load.image('background', 'assets/tempbackground.png');
-        
         //TRANSITION STUFF
         // Actual transition assets
         this.load.image('sun', 'assets/transition/sun.png');
@@ -122,7 +128,17 @@ class Play extends Phaser.Scene{
         keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
-       
+        
+        // Cards
+        this.fireCard = this.add.sprite('fireCard');
+        this.waterCard = this.add.sprite('waterCard');
+        this.grassCard = this.add.sprite('grassCard');
+
+        // Element Icons
+        this.fireIcon = this.add.sprite('fireIcon');
+        this.waterIcon = this.add.sprite('waterIcon');
+        this.grassIcon = this.add.sprite('grassIcon');
+
         // Set the potion
         const potionScale = .3;
         this.globalPotionScale = potionScale;
