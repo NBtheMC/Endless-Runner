@@ -18,13 +18,13 @@ class Play extends Phaser.Scene{
         this.load.image('waterSpark', 'assets/waterSpark.png');
         this.load.image('grassSpark', 'assets/grassSpark.png');
         // Card Assets
-        this.load.image('fireCard', 'wizard_card_fire3.png');
-        this.load.image('waterCard', 'wizard_card_water3.png');
-        this.load.image('grassCard', 'wizard_card_grass3.png');
+        this.load.image('fireCard', 'assets/wizard_cards_fire3.png');
+        this.load.image('waterCard', 'assets/wizard_cards_water3.png');
+        this.load.image('grassCard', 'assets/wizard_cards_grass3.png');
         // Icon Assets
-        this.load.image('fireIcon', 'wizard_warn_fire1.png');
-        this.load.image('waterIcon', 'wizard_warn_water1.png');
-        this.load.image('grassIcon', 'wizard_warn_grass1.png');
+        this.load.image('fireIcon', 'assets/wizard_warn_fire1.png');
+        this.load.image('waterIcon', 'assets/wizard_warn_water1.png');
+        this.load.image('grassIcon', 'assets/wizard_warn_grass1.png');
 
         //TRANSITION STUFF
         // Actual transition assets
@@ -130,9 +130,11 @@ class Play extends Phaser.Scene{
         keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
         
         // Cards
-        this.fireCard = this.add.sprite('fireCard');
-        this.waterCard = this.add.sprite('waterCard');
-        this.grassCard = this.add.sprite('grassCard');
+        const cardScale = .3;
+        this.globalCardScale = cardScale;
+        this.fireCard = this.add.sprite(2 * game.config.width/3, 100,'fireCard').setScale(cardScale);
+        this.waterCard = this.add.sprite(game.config.width/3, 100,'waterCard').setScale(cardScale);
+        this.grassCard = this.add.sprite(game.config.width/2, 100,'grassCard').setScale(cardScale);
 
         // Element Icons
         this.fireIcon = this.add.sprite('fireIcon');
@@ -304,12 +306,22 @@ class Play extends Phaser.Scene{
         // Throwing different potions
         if(!this.isThrowing){
             if(Phaser.Input.Keyboard.JustDown(keyQ)){
+                //set cards to inactive
+                this.fireCard.setAlpha(.5);
+                this.waterCard.setAlpha(.5);
+                this.grassCard.setAlpha(.5);
                 this.throwPotion(this.elements.FIRE);
             }
             else if(Phaser.Input.Keyboard.JustDown(keyW)){
+                this.fireCard.setAlpha(.5);
+                this.waterCard.setAlpha(.5);
+                this.grassCard.setAlpha(.5);
                 this.throwPotion(this.elements.WATER);
             }
             else if(Phaser.Input.Keyboard.JustDown(keyE)){
+                this.fireCard.setAlpha(.5);
+                this.waterCard.setAlpha(.5);
+                this.grassCard.setAlpha(.5);
                 this.throwPotion(this.elements.GRASS);
             }
         }
@@ -396,6 +408,13 @@ class Play extends Phaser.Scene{
 
     resetPotion(){
         this.woosh.stop();
+        //maybe tweens here
+        this.fireCard.setAlpha(1);
+        this.fireCard.setScale(this.globalCardScale);
+        this.waterCard.setAlpha(1);
+        this.waterCard.setScale(this.globalCardScale);
+        this.grassCard.setAlpha(1);
+        this.grassCard.setScale(this.globalCardScale);
         this.isThrowing = false;
         this.potion.visible = false;
         this.potion.setVelocityX(0);
