@@ -24,9 +24,23 @@ class Menu extends Phaser.Scene {
             fixedWidth: 0
         }
 
+        let titleConfig = {
+            fontFamily: 'Verdana',
+            fontSize: '45px',
+            color: 'white',
+            align: 'center',
+            padding: {
+            top: 5,
+            bottom: 5,
+            left: 5,
+            right: 5
+            },
+            fixedWidth: 0
+        }
+
         let customHeight = 50;
         // Menu Text
-        this.add.text(game.config.width/2, game.config.height/2 - customHeight*2, "Nell's Wizard Adventure!", menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2 - customHeight*2, "Nell's Wizard Adventure!", titleConfig).setOrigin(0.5);
         this.add.text(game.config.width/2, game.config.height/2, 'Use the arrow keys to dodge incoming obstacles', menuConfig).setOrigin(0.5);
         this.add.text(game.config.width/2, game.config.height/2 + customHeight, 'or press the prompt in time to destroy them and get more points', menuConfig).setOrigin(0.5);
         this.add.text(game.config.width/2, game.config.height/2 + 2.5 * customHeight, 'Press Space to start!', menuConfig).setOrigin(0.5);
