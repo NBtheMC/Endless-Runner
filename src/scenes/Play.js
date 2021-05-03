@@ -61,7 +61,7 @@ class Play extends Phaser.Scene{
         this.load.audio('on_death', 'assets/onDeath.wav');
         this.load.audio('potion_destroy', 'assets/potionDestroy.wav');
         this.load.audio('obstacle_destroy', 'assets/obstacleDestroy.wav');
-
+        this.load.audio('on_shoot', 'assets/shoot.wav');
     }
 
     create(){
@@ -200,6 +200,7 @@ class Play extends Phaser.Scene{
         this.death = this.sound.add('on_death');
         this.wrong = this.sound.add('potion_destroy');
         this.right = this.sound.add('obstacle_destroy');
+        this.shoot = this.sound.add('on_shoot');
 
         // Potion collides with obstacle (get rid of obstacle and reset potion)
         // p = potion, o = obstacle
@@ -453,6 +454,7 @@ class Play extends Phaser.Scene{
         this.potion.alpha = 100;
         this.potion.x = this.player.x;
         this.potion.y = this.player.y;
+        this.shoot.play();
         this.player.play('noPotion');
     }
 
