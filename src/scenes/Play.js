@@ -58,6 +58,9 @@ class Play extends Phaser.Scene{
         this.load.image('lvl3_foregrass', 'assets/level3/lvl3_foregrass.png');
 
         //SOUND
+        this.load.audio('song1','assets/tune5');
+        this.load.audio('song2','assets/tune4');
+        this.load.audio('song3','assets/tune2');
         this.load.audio('on_death', 'assets/onDeath.wav');
         this.load.audio('potion_destroy', 'assets/potionDestroy.wav');
         this.load.audio('obstacle_destroy', 'assets/obstacleDestroy.wav');
@@ -122,7 +125,7 @@ class Play extends Phaser.Scene{
                 key: 'player',
                 frame: 'noPotionFrame5'
             }],
-            frameRate: 8,
+            frameRate: 10,
             repeat: -1
         });
         this.anims.create({
@@ -143,7 +146,7 @@ class Play extends Phaser.Scene{
                 key: 'player',
                 frame: 'potionFrame5'
             }],
-            frameRate: 8,
+            frameRate: 10,
             repeat: -1
         });
         this.player.play('noPotion');
@@ -196,6 +199,11 @@ class Play extends Phaser.Scene{
         this.isThrowing = false;
         this.potion.element = this.elements.NONE;
         
+        //music
+        this.section1Song = this.sound.add('song1');
+        this.section2Song = this.sound.add('song2');
+        this.section3Song = this.sound.add('song3');
+
         //sounds
         this.death = this.sound.add('on_death');
         this.wrong = this.sound.add('potion_destroy');
