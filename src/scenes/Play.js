@@ -264,6 +264,8 @@ class Play extends Phaser.Scene{
         // Player collides with obstacle (game over)
         this.physics.add.collider(this.player, this.activeObstacles, null, function() {
             this.death.play();
+            this.section1Song.stop();
+            this.section2Song.stop();
             this.section3Song.stop();
 
             // INCLUDE DEATH ANIMATION HERE
@@ -376,6 +378,7 @@ class Play extends Phaser.Scene{
                 this.waterCard.setAlpha(.5);
                 this.grassCard.setAlpha(.5);
                 this.throwPotion(this.elements.FIRE);
+                //make water card pop
             }
             else if(Phaser.Input.Keyboard.JustDown(keyW)){
                 this.fireCard.setAlpha(.5);
@@ -531,10 +534,6 @@ class Play extends Phaser.Scene{
 
             destroyTransition1 = this.time.addEvent({ delay: 8000, callback: this.destroyTransition, args: [1], callbackScope: this});
 
-            //swap music
-            this.section1Song.stop();
-            this.section2Song.play();
-            this.section2Song.loop = true;
         }
         if (flag == 2) {
             activeY = [200, 400, 600];
@@ -555,11 +554,6 @@ class Play extends Phaser.Scene{
             this.player.depth = 1;
 
             destroyTransition2 = this.time.addEvent({ delay: 8000, callback: this.destroyTransition, args: [2], callbackScope: this});
-
-            //swap music
-            this.section2Song.stop();
-            this.section3Song.play();
-            this.section3Song.loop = true;
         }
     }
 
@@ -570,6 +564,9 @@ class Play extends Phaser.Scene{
             this.midtrees.setTexture('lvl2_midtrees');
             this.foretrees.setTexture('lvl2_foretrees');
             this.ground.setTexture('lvl2_ground');
+            //swap music
+            this.section2Song.play();
+            this.section2Song.loop = true;
         }
         if (flag == 2) {
             this.base.setTexture('lvl3_base');
@@ -577,6 +574,9 @@ class Play extends Phaser.Scene{
             this.midtrees.setTexture('lvl3_midtrees');
             this.foretrees.setTexture('lvl3_foretrees');
             this.ground.setTexture('lvl3_ground');
+            //swap music
+            this.section3Song.play();
+            this.section3Song.loop = true;
         }
     }
     destroyTransition(flag) {
@@ -585,12 +585,14 @@ class Play extends Phaser.Scene{
             this.sun.destroy();
             this.sky1.destroy();
             activeY = [];
+            this.section1Song.stop();
         }
         if (flag == 2) {
             this.transitionTree1.destroy();
             this.moon.destroy();
             this.sky2.destroy();
             activeY = [];
+            this.section2Song.stop();
         }
     }
 }
