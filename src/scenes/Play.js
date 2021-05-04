@@ -558,14 +558,12 @@ class Play extends Phaser.Scene{
     }
     destroyTransition(flag) {
         if (flag == 1) {
-            console.log("Transition 1 over")
             this.transitionTree1.destroy();
             this.sun.destroy();
             this.sky1.destroy();
             activeY = [];
         }
         if (flag == 2) {
-            console.log("Transition 2 over")
             this.transitionTree1.destroy();
             this.moon.destroy();
             this.sky2.destroy();

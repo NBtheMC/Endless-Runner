@@ -1,3 +1,21 @@
+/* Header
+Collaborator Names: 
+    Emil Saechao, Miriam Perez, Naman Bhushan, and Paul Lee.
+Game Title: 
+    Nell's Wizard Adventure
+Date Completed: 
+    May 3rd, 2021
+Creative Tilt Justification:
+    For our technical side, we're particularly proud of our implementation of particles and transitions.
+    Naman...
+    Paul tested out different object velocities & timings to make the transitions cohesive and as seamless as possible. 
+    This was done with addEvents with delays to patch bugs that occurred when dying in the middle of a transition with setTimeout().
+
+    For our art side, we're particularly proud of our original music and art.
+    Miriam...
+    Emil...
+*/
+
 let config = {
     type: Phaser.AUTO,
     width: 1800,
@@ -16,7 +34,6 @@ let config = {
 }
 
 let gameOptions = {
-    // From https://www.emanueleferonato.com/2018/11/13/build-a-html5-endless-runner-with-phaser-in-a-few-lines-of-code-using-arcade-physics-and-featuring-object-pooling/
     obstacleStartSpeed: 350,
     spawnRange: [100, 350],
     obstacleSizeRange: [50, 250],
