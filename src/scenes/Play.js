@@ -8,9 +8,9 @@ class Play extends Phaser.Scene{
         //this.load.image('player', 'assets/tempwizard.png');
         this.load.atlas('player', 'assets/playerSpritesheet.png','assets/playerSprites.json');
         // Obstacle Assets
-        this.load.image('fire', 'assets/obstacleFire.png');
-        this.load.image('water', 'assets/obstacleWater.png');
-        this.load.image('grass', 'assets/obstacleGrass.png');
+        this.load.image('fire', 'assets/obstacleFire2.png');
+        this.load.image('water', 'assets/obstacleWater2.png');
+        this.load.image('grass', 'assets/obstacleGrass2.png');
         // Potion Assets
         this.load.image('firePotion', 'assets/firePotion.png');
         this.load.image('waterPotion', 'assets/waterPotion.png');
@@ -58,9 +58,9 @@ class Play extends Phaser.Scene{
         this.load.image('lvl3_foregrass', 'assets/level3/lvl3_foregrass.png');
 
         //SOUND
-        this.load.audio('song1','assets/tune5');
-        this.load.audio('song2','assets/tune4');
-        this.load.audio('song3','assets/tune2');
+        this.load.audio('song1','assets/tune5.mp3');
+        this.load.audio('song2','assets/tune4.mp3');
+        this.load.audio('song3','assets/tune2.mp3');
         this.load.audio('on_death', 'assets/onDeath.wav');
         this.load.audio('potion_destroy', 'assets/potionDestroy.wav');
         this.load.audio('obstacle_destroy', 'assets/obstacleDestroy.wav');
