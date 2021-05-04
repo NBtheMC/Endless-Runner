@@ -23,7 +23,7 @@ class Menu extends Phaser.Scene {
         // blue arms
         this.c2 = this.add.tileSprite(1550, 600, 720, 720, 'b2');
         // yellow
-        this.c3 = this.add.tileSprite(600, 0, 720, 720, 'b3');
+        this.c3 = this.add.tileSprite(675, 0, 720, 720, 'b3');
         // brown
         this.c4 = this.add.tileSprite(175, 600, 720, 720, 'b4');
         // green
