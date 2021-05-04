@@ -522,7 +522,7 @@ class Play extends Phaser.Scene{
             environment2 = this.time.addEvent({ delay: 3500, callback: this.changeEnvironment, args: [2], callbackScope: this});
 
             this.sky2 = this.physics.add.sprite(game.config.width, 0,'sky2').setOrigin(0,0);
-            this.moon = this.physics.add.sprite(game.config.width, 0,'moon').setOrigin(0.25,0.5);
+            this.moon = this.physics.add.sprite(game.config.width, 0,'moon').setOrigin(0.25,-0.5);
             this.transitionTree1 = this.physics.add.sprite(game.config.width, 0,'transitionTree').setOrigin(0,0);
             this.sky2.depth = 2;
             this.moon.depth = 2;
@@ -530,7 +530,7 @@ class Play extends Phaser.Scene{
 
             this.transitionTree1.body.setVelocityX(-600);
             this.moon.body.setVelocityX(-350);
-            this.moon.body.setVelocityY(100);
+            this.moon.body.setVelocityY(-150);
             this.sky2.body.setVelocityX(-600);
 
             this.player.depth = 1;
