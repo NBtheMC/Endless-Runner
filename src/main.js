@@ -7,7 +7,8 @@ Date Completed:
     May 3rd, 2021
 Creative Tilt Justification:
     For our technical side, we're particularly proud of our implementation of particles and transitions.
-    Naman...
+    Naman researched the particle emitter using the phaser documentation to add some polish visual feedback. 
+    Although not an artist, he also made the particles that fit the theme.
     Paul tested out different object velocities & timings to make the transitions cohesive and as seamless as possible. 
     This was done with addEvents with delays to patch bugs that occurred when dying in the middle of a transition with setTimeout().
 
