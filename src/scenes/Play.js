@@ -8,9 +8,9 @@ class Play extends Phaser.Scene{
         //this.load.image('player', 'assets/tempwizard.png');
         this.load.atlas('player', 'assets/playerSpritesheet.png','assets/playerSprites.json');
         // Obstacle Assets
-        this.load.image('fire', 'assets/obstacleFire.png');
-        this.load.image('water', 'assets/obstacleWater.png');
-        this.load.image('grass', 'assets/obstacleGrass.png');
+        this.load.image('fire', 'assets/obstacleFire2.png');
+        this.load.image('water', 'assets/obstacleWater2.png');
+        this.load.image('grass', 'assets/obstacleGrass2.png');
         // Potion Assets
         this.load.image('firePotion', 'assets/firePotion.png');
         this.load.image('waterPotion', 'assets/waterPotion.png');
@@ -58,6 +58,9 @@ class Play extends Phaser.Scene{
         this.load.image('lvl3_foregrass', 'assets/level3/lvl3_foregrass.png');
 
         //SOUND
+        this.load.audio('song1','assets/tune5.mp3');
+        this.load.audio('song2','assets/tune4.mp3');
+        this.load.audio('song3','assets/tune2.mp3');
         this.load.audio('on_death', 'assets/onDeath.wav');
         this.load.audio('potion_destroy', 'assets/potionDestroy.wav');
         this.load.audio('obstacle_destroy', 'assets/obstacleDestroy.wav');
@@ -71,7 +74,7 @@ class Play extends Phaser.Scene{
         bonus = 0;
 
         // Timer for transition
-        this.transitionTimer = 1000;
+        this.transitionTimer = 18000;
 
         // Invisible wall at top
         this.topBarrier = this.physics.add.sprite(game.config.width/2, 0, 1800,game.config.height/3);
@@ -122,7 +125,7 @@ class Play extends Phaser.Scene{
                 key: 'player',
                 frame: 'noPotionFrame5'
             }],
-            frameRate: 8,
+            frameRate: 10,
             repeat: -1
         });
         this.anims.create({
@@ -143,7 +146,7 @@ class Play extends Phaser.Scene{
                 key: 'player',
                 frame: 'potionFrame5'
             }],
-            frameRate: 8,
+            frameRate: 10,
             repeat: -1
         });
         this.player.play('noPotion');
@@ -196,6 +199,14 @@ class Play extends Phaser.Scene{
         this.isThrowing = false;
         this.potion.element = this.elements.NONE;
         
+        //music
+        this.section1Song = this.sound.add('song1');
+        this.section2Song = this.sound.add('song2');
+        this.section3Song = this.sound.add('song3');
+
+        this.section1Song.play();
+        this.section1Song.loop = true;
+
         //sounds
         this.death = this.sound.add('on_death');
         this.wrong = this.sound.add('potion_destroy');
@@ -253,6 +264,8 @@ class Play extends Phaser.Scene{
         // Player collides with obstacle (game over)
         this.physics.add.collider(this.player, this.activeObstacles, null, function() {
             this.death.play();
+            this.section3Song.stop();
+
             // INCLUDE DEATH ANIMATION HERE
             // INCLUDE WAY TO SHOW HIGH SCORE
             this.scene.start('menuScene');
@@ -280,7 +293,7 @@ class Play extends Phaser.Scene{
         });
 
         transition2 = this.time.addEvent({ 
-            delay: this.transitionTimer + 20000, 
+            delay: this.transitionTimer + 22000, 
             callback: this.transition, 
             args: [2], 
             callbackScope: this
@@ -517,6 +530,11 @@ class Play extends Phaser.Scene{
             this.player.depth = 1;
 
             destroyTransition1 = this.time.addEvent({ delay: 8000, callback: this.destroyTransition, args: [1], callbackScope: this});
+
+            //swap music
+            this.section1Song.stop();
+            this.section2Song.play();
+            this.section2Song.loop = true;
         }
         if (flag == 2) {
             activeY = [200, 400, 600];
@@ -537,6 +555,11 @@ class Play extends Phaser.Scene{
             this.player.depth = 1;
 
             destroyTransition2 = this.time.addEvent({ delay: 8000, callback: this.destroyTransition, args: [2], callbackScope: this});
+
+            //swap music
+            this.section2Song.stop();
+            this.section3Song.play();
+            this.section3Song.loop = true;
         }
     }
 
