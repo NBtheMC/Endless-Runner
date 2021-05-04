@@ -74,7 +74,7 @@ class Play extends Phaser.Scene{
         bonus = 0;
 
         // Timer for transition
-        this.transitionTimer = 1000;
+        this.transitionTimer = 18000;
 
         // Invisible wall at top
         this.topBarrier = this.physics.add.sprite(game.config.width/2, 0, 1800,game.config.height/3);
@@ -204,6 +204,9 @@ class Play extends Phaser.Scene{
         this.section2Song = this.sound.add('song2');
         this.section3Song = this.sound.add('song3');
 
+        this.section1Song.play();
+        this.section1Song.loop = true;
+
         //sounds
         this.death = this.sound.add('on_death');
         this.wrong = this.sound.add('potion_destroy');
@@ -261,6 +264,8 @@ class Play extends Phaser.Scene{
         // Player collides with obstacle (game over)
         this.physics.add.collider(this.player, this.activeObstacles, null, function() {
             this.death.play();
+            this.section3Song.stop();
+
             // INCLUDE DEATH ANIMATION HERE
             // INCLUDE WAY TO SHOW HIGH SCORE
             this.scene.start('menuScene');
@@ -288,7 +293,7 @@ class Play extends Phaser.Scene{
         });
 
         transition2 = this.time.addEvent({ 
-            delay: this.transitionTimer + 20000, 
+            delay: this.transitionTimer + 22000, 
             callback: this.transition, 
             args: [2], 
             callbackScope: this
@@ -525,6 +530,11 @@ class Play extends Phaser.Scene{
             this.player.depth = 1;
 
             destroyTransition1 = this.time.addEvent({ delay: 8000, callback: this.destroyTransition, args: [1], callbackScope: this});
+
+            //swap music
+            this.section1Song.stop();
+            this.section2Song.play();
+            this.section2Song.loop = true;
         }
         if (flag == 2) {
             activeY = [200, 400, 600];
@@ -545,6 +555,11 @@ class Play extends Phaser.Scene{
             this.player.depth = 1;
 
             destroyTransition2 = this.time.addEvent({ delay: 8000, callback: this.destroyTransition, args: [2], callbackScope: this});
+
+            //swap music
+            this.section2Song.stop();
+            this.section3Song.play();
+            this.section3Song.loop = true;
         }
     }
 
