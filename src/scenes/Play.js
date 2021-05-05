@@ -375,22 +375,54 @@ class Play extends Phaser.Scene{
             if(Phaser.Input.Keyboard.JustDown(keyQ)){
                 //set cards to inactive
                 this.fireCard.setAlpha(.5);
-                this.waterCard.setAlpha(.5);
                 this.grassCard.setAlpha(.5);
                 this.throwPotion(this.elements.FIRE);
                 //make water card pop
+                this.add.tween({
+                    targets: this.waterCard,
+                    duration: 300,
+                    scaleX: this.globalCardScale*1.1,
+                    scaleY: this.globalCardScale*1.1,
+                    yoyo: true,
+                    onComplete: function() {
+                        this.waterCard.setAlpha(.5);
+                    },
+                    onCompleteScope: this,
+                });
             }
             else if(Phaser.Input.Keyboard.JustDown(keyW)){
                 this.fireCard.setAlpha(.5);
                 this.waterCard.setAlpha(.5);
-                this.grassCard.setAlpha(.5);
                 this.throwPotion(this.elements.WATER);
+                //make grass card pop
+                this.add.tween({
+                    targets: this.grassCard,
+                    duration: 300,
+                    scaleX: this.globalCardScale*1.1,
+                    scaleY: this.globalCardScale*1.1,
+                    yoyo: true,
+                    onComplete: function() {
+                        this.grassCard.setAlpha(.5);
+                    },
+                    onCompleteScope: this,
+                });
             }
             else if(Phaser.Input.Keyboard.JustDown(keyE)){
-                this.fireCard.setAlpha(.5);
                 this.waterCard.setAlpha(.5);
                 this.grassCard.setAlpha(.5);
                 this.throwPotion(this.elements.GRASS);
+                //make fire card pop
+                this.add.tween({
+                    targets: this.fireCard,
+                    duration: 300,
+                    scaleX: this.globalCardScale*1.1,
+                    scaleY: this.globalCardScale*1.1,
+                    yoyo: true,
+                    onComplete: function() {
+                        this.fireCard.setAlpha(.5);
+                    },
+                    onCompleteScope: this,
+                });
             }
         }
         else{
