@@ -8,12 +8,13 @@ Date Completed:
 Creative Tilt Justification:
     For our technical side, we're particularly proud of our implementation of particles and transitions.
     Naman researched the particle emitter using the phaser documentation to add some polish visual feedback. 
-    Although not an artist, he also made the particles that fit the theme.
+        Although not an artist, he also made the particles that fit the theme.
     Paul tested out different object velocities & timings to make the transitions cohesive and as seamless as possible. 
-    This was done with addEvents with delays to patch bugs that occurred when dying in the middle of a transition with setTimeout().
+        This was done with addEvents with delays to patch bugs that occurred when dying in the middle of a transition with setTimeout().
 
     For our art side, we're particularly proud of our original music and art.
-    Miriam...
+    Miriam created the musical scores and did the final sound mixing for the multiple instraments through a music sheet editor,
+        created the three attack cards and warning icons for the obstacles, and added in the animated swirling designs on the main menu.
     Emil created original visual concepts for the background, character, and obstacles to ensure that there was a visual direction and
         that the group enjoyed what the game was going to look like. He also created the final assets for those, drawing the
         frame-by-frame animation for the main character.
