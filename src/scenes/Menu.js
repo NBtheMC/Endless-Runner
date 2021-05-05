@@ -39,7 +39,7 @@ class Menu extends Phaser.Scene {
         let menuConfig = {
             fontFamily: 'Verdana',
             fontSize: '24px',
-            backgroundColor: '#F3AC5E',
+            backgroundColor: '#9CCED6',
             color: '#000000',
             align: 'right',
             padding: {

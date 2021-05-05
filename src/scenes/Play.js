@@ -106,7 +106,7 @@ class Play extends Phaser.Scene{
 
         // Player stuff
         this.player = this.physics.add.sprite(game.config.width/7, game.config.height/2, 'player').setScale(.3);
-        let frameNames = this.textures.get('player').getFrameNames();
+        //let frameNames = this.textures.get('player').getFrameNames();
         this.anims.create({
             key: 'noPotion',
             frames: [{
@@ -248,15 +248,16 @@ class Play extends Phaser.Scene{
             }
             else{
                 this.wrong.play();
-                this.boom = this.add.particles('smoke').createEmitter({
-                    speed: 100,
-                    gravity: { x: 0, y: -200 },
-                    scale: { start: 0.1, end: .5 },
-                    x: p.x,
-                    y: p.y,
-                    lifespan: 500
-                });
-                //this.time.events.add(300, this.boom.destroy(), this);
+                // smoke particles wack
+                // let boom = this.add.particles('smoke').createEmitter({
+                //     speed: 100,
+                //     gravity: { x: 0, y: -200 },
+                //     scale: { start: 0.1, end: .5 },
+                //     x: p.x,
+                //     y: p.y,
+                //     lifespan: 500
+                // });
+                // this.time.delayedCall(500, boom.stop(), this);
                 this.resetPotion();
             }
         }, null, this);
@@ -301,6 +302,7 @@ class Play extends Phaser.Scene{
             callbackScope: this
         });
     }
+  
     // Adds obstacle
     addObstacle(x, element){
         let obstacle;
