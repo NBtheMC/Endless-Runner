@@ -550,6 +550,11 @@ class Play extends Phaser.Scene{
     // TRANSITION
     transition(flag) {
         if (flag == 1) {
+            this.activeObstacles.getChildren().forEach(function(obstacle) {
+                delete activeY[obstacle.y];
+                this.activeObstacles.killAndHide(obstacle);
+                this.activeObstacles.remove(obstacle);
+            }, this);
             activeY = [200, 400, 600];
             environment1 = this.time.addEvent({ delay: 3500, callback: this.changeEnvironment, args: [1], callbackScope: this});
 
@@ -571,6 +576,11 @@ class Play extends Phaser.Scene{
             this.speedMultiplier = 1.5;
         }
         if (flag == 2) {
+            this.activeObstacles.getChildren().forEach(function(obstacle) {
+                delete activeY[obstacle.y];
+                this.activeObstacles.killAndHide(obstacle);
+                this.activeObstacles.remove(obstacle);
+            }, this);
             activeY = [200, 400, 600];
             environment2 = this.time.addEvent({ delay: 3500, callback: this.changeEnvironment, args: [2], callbackScope: this});
 
