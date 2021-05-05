@@ -14,7 +14,9 @@ Creative Tilt Justification:
 
     For our art side, we're particularly proud of our original music and art.
     Miriam...
-    Emil...
+    Emil created original visual concepts for the background, character, and obstacles to ensure that there was a visual direction and
+        that the group enjoyed what the game was going to look like. He also created the final assets for those, drawing the
+        frame-by-frame animation for the main character.
 */
 
 let config = {
