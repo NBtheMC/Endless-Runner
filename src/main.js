@@ -35,7 +35,7 @@ let config = {
 }
 
 let gameOptions = {
-    obstacleStartSpeed: 350,
+    obstacleStartSpeed: 150,
     spawnRange: [100, 350],
     obstacleSizeRange: [50, 250],
 }

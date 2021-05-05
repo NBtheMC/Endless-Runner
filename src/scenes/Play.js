@@ -75,7 +75,7 @@ class Play extends Phaser.Scene{
 
         // Timer for transition
         this.transitionTimer = 18000;
-
+        
         // Invisible wall at top
         this.topBarrier = this.physics.add.sprite(game.config.width/2, 0, 1800,game.config.height/3);
         this.topBarrier.body.setSize(game.config.width, game.config.height/3);
@@ -249,15 +249,17 @@ class Play extends Phaser.Scene{
             else{
                 this.wrong.play();
                 // smoke particles wack
-                // let boom = this.add.particles('smoke').createEmitter({
-                //     speed: 100,
-                //     gravity: { x: 0, y: -200 },
-                //     scale: { start: 0.1, end: .5 },
-                //     x: p.x,
-                //     y: p.y,
-                //     lifespan: 500
-                // });
-                // this.time.delayedCall(500, boom.stop(), this);
+                this.boom = this.add.particles('smoke').createEmitter({
+                    speed: 100,
+                    gravity: { x: 0, y: -200 },
+                    scale: { start: 0.1, end: .5 },
+                    x: p.x,
+                    y: p.y,
+                    lifespan: 750
+                });
+                this.time.delayedCall(750, () =>{
+                    this.boom.remove();
+                });
                 this.resetPotion();
             }
         }, null, this);
@@ -341,8 +343,7 @@ class Play extends Phaser.Scene{
     }    
 
     update(time, delta){
-        this.speedMultiplier *= 1.0001;
-        deltaMultiplier = (delta/16.66667);
+        //deltaMultiplier = (delta/16.66667);
         // Score stuff:
         // Updates timer
         timer = this.getTime() - this.start;
@@ -460,10 +461,10 @@ class Play extends Phaser.Scene{
         }
 
         // Transition Level 1 Movement
-        this.backtrees.tilePositionX += 0.5;
-        this.midtrees.tilePositionX += 2;
-        this.foretrees.tilePositionX += 7.5;
-        this.ground.tilePositionX += 8;
+        this.backtrees.tilePositionX += (0.5*this.speedMultiplier);
+        this.midtrees.tilePositionX += (2*this.speedMultiplier);
+        this.foretrees.tilePositionX += (7*this.speedMultiplier);
+        this.ground.tilePositionX += (7.5*this.speedMultiplier);
     }
 
     // EXTERNAL FUNCTIONS
@@ -567,7 +568,7 @@ class Play extends Phaser.Scene{
             this.player.depth = 1;
 
             destroyTransition1 = this.time.addEvent({ delay: 8000, callback: this.destroyTransition, args: [1], callbackScope: this});
-
+            this.speedMultiplier = 1.5;
         }
         if (flag == 2) {
             activeY = [200, 400, 600];
@@ -588,6 +589,7 @@ class Play extends Phaser.Scene{
             this.player.depth = 1;
 
             destroyTransition2 = this.time.addEvent({ delay: 8000, callback: this.destroyTransition, args: [2], callbackScope: this});
+            this.speedMultiplier = 3;
         }
     }
 
